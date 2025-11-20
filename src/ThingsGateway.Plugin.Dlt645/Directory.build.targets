@@ -1,0 +1,27 @@
+<Project>
+	<Target Name="CopyNugetPackages" AfterTargets="Build">
+		<ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
+			<!-- setting up the variable for convenience -->
+			<ThingsGateway_Foundation_Dlt645PackageFiles Include="$(PkgThingsGateway_Foundation_Dlt645)\lib\net8.0\*.*" />
+		</ItemGroup>
+		<ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+			<ThingsGateway_Foundation_Dlt645PackageFiles Include="$(PkgThingsGateway_Foundation_Dlt645)\lib\net10.0\*.*" />
+		</ItemGroup>
+		<PropertyGroup>
+			<ApplicationFolder>$(TargetDir)</ApplicationFolder>
+		</PropertyGroup>
+		<Copy SourceFiles="@(ThingsGateway_Foundation_Dlt645PackageFiles)" DestinationFolder="$(ApplicationFolder)%(RecursiveDir)" />
+	</Target>
+
+	<!--在构建后触发的。它通过在 Nuget 包的 Content 文件夹中包含目标目录中的所有文件和子文件夹来创建 nuget 包-->
+	<Target Name="IncludeAllFilesInTargetDir" AfterTargets="Build">
+
+		<ItemGroup>
+			<Content Include="$(ProjectDir)$(OutputPath)\$(TargetFramework)\**\*Dlt645*.dll">
+				<Pack>true</Pack>
+				<PackagePath>Content</PackagePath>
+			</Content>
+		</ItemGroup>
+	</Target>
+
+</Project>

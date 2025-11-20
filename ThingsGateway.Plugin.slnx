@@ -1,0 +1,23 @@
+<Solution>
+  <Folder Name="/Benchmark/" />
+  <Folder Name="/src/">
+    <Project Path="src/ThingsGateway.Debug.Razor/ThingsGateway.Debug.Razor.csproj" />
+    <Project Path="src/ThingsGateway.Plugin.DB/ThingsGateway.Plugin.DB.csproj" />
+    <Project Path="src/ThingsGateway.Plugin.Dlt645/ThingsGateway.Plugin.Dlt645.csproj" />
+    <Project Path="src/ThingsGateway.Plugin.Http/ThingsGateway.Plugin.Http.csproj" />
+    <Project Path="src/ThingsGateway.Plugin.Kafka/ThingsGateway.Plugin.Kafka.csproj" />
+    <Project Path="src/ThingsGateway.Plugin.Modbus/ThingsGateway.Plugin.Modbus.csproj" />
+    <Project Path="src/ThingsGateway.Plugin.Mqtt/ThingsGateway.Plugin.Mqtt.csproj" />
+    <Project Path="src/ThingsGateway.Plugin.OpcDa/ThingsGateway.Plugin.OpcDa.csproj" />
+    <Project Path="src/ThingsGateway.Plugin.OpcUa/ThingsGateway.Plugin.OpcUa.csproj" />
+    <Project Path="src/ThingsGateway.Plugin.RabbitMQ/ThingsGateway.Plugin.RabbitMQ.csproj" />
+    <Project Path="src/ThingsGateway.Plugin.SiemensS7/ThingsGateway.Plugin.SiemensS7.csproj" />
+  </Folder>
+  <Folder Name="/Test/" />
+  <Folder Name="/解决方案项/">
+    <File Path=".gitignore" />
+    <File Path="Directory.Build.props" />
+    <File Path="PackNuget.props" />
+    <File Path="README.md" />
+  </Folder>
+</Solution>
