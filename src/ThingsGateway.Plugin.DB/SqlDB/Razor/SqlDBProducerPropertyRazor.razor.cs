@@ -161,7 +161,7 @@ namespace ThingsGateway.Debug
             },
         {nameof(ScriptCheck.ScriptChanged),EventCallback.Factory.Create<string>(this, v =>
         {
-                 if (pname == nameof(SqlDBProducerProperty.BigTextScriptHistoryTable))
+    if (pname == nameof(SqlDBProducerProperty.BigTextScriptHistoryTable))
     {
             businessProperty.BigTextScriptHistoryTable=v;
     }

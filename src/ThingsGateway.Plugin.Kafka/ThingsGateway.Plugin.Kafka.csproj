@@ -7,13 +7,21 @@
 
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="ThingsGateway.Gateway.Application" Version="$(GatewayVersion)" />
-
 		<PackageReference Include="Confluent.Kafka" Version="2.12.0" GeneratePathProperty="true">
 			<PrivateAssets>contentFiles;build;buildMultitargeting;buildTransitive;analyzers;</PrivateAssets>
 		</PackageReference>
 	</ItemGroup>
 
+
+	<ItemGroup Condition=" '$(SolutionName)' != 'ThingsGatewayAll' OR '$(Configuration)' == 'Release' ">
+		<PackageReference Include="ThingsGateway.Gateway.Application" Version="$(GatewayVersion)" />
+	</ItemGroup>
+
+	<ItemGroup Condition=" '$(SolutionName)' == 'ThingsGatewayAll' AND '$(Configuration)' != 'Release' ">
+		<ProjectReference Include="..\..\..\ThingsGateway\src\ThingsGateway.Gateway.Application\ThingsGateway.Gateway.Application.csproj" />
+	</ItemGroup>
+	
+	
 	<ItemGroup>
 		<Content Remove="Locales\*.json" />
 		<EmbeddedResource Include="Locales\*.json">

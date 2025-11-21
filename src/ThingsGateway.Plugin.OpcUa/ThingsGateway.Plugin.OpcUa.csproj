@@ -17,12 +17,23 @@
 		</EmbeddedResource>
 	</ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="ThingsGateway.Gateway.Razor" Version="$(GatewayVersion)" />
+
+	<ItemGroup Condition=" '$(SolutionName)' != 'ThingsGatewayAll' OR '$(Configuration)' == 'Release' ">
+		<PackageReference Include="ThingsGateway.Gateway.Razor.Common" Version="$(GatewayVersion)" />
+
 		<PackageReference Include="ThingsGateway.Foundation.OpcUa" Version="$(FoundationVersion)"  GeneratePathProperty="true">
 			<PrivateAssets>contentFiles;build;buildMultitargeting;buildTransitive;analyzers;</PrivateAssets>
 		</PackageReference>
-		
+
+	</ItemGroup>
+
+	<ItemGroup Condition=" '$(SolutionName)' == 'ThingsGatewayAll' AND '$(Configuration)' != 'Release' ">
+		<ProjectReference Include="..\..\..\ThingsGateway.Foundation\src\ThingsGateway.Foundation.OpcUa\ThingsGateway.Foundation.OpcUa.csproj" />
+		<ProjectReference Include="..\..\..\ThingsGateway\src\ThingsGateway.Gateway.Razor.Common\ThingsGateway.Gateway.Razor.Common.csproj" />
+	</ItemGroup>
+	
+
+	<ItemGroup>
 
 		<PackageReference Include="OPCFoundation.NetStandard.Opc.Ua.Server" Version="1.5.377.22" GeneratePathProperty="true">
 			<PrivateAssets>contentFiles;build;buildMultitargeting;buildTransitive;analyzers;</PrivateAssets>

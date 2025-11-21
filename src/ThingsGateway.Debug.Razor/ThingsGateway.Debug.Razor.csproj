@@ -33,19 +33,28 @@
 		<Content Include="..\ThingsGateway.Plugin.OpcUa\Pages\OpcUaMaster.razor" Link="Pages\OpcUaMaster.razor" Pack="false" />
 	</ItemGroup>
 
-	<ItemGroup>
+
+	<ItemGroup Condition=" '$(SolutionName)' != 'ThingsGatewayAll' OR '$(Configuration)' == 'Release' ">
 		<PackageReference Include="ThingsGateway.Foundation.Razor" Version="$(GatewayVersion)" />
 		<PackageReference Include="ThingsGateway.Foundation.Modbus" Version="$(FoundationVersion)" />
 		<PackageReference Include="ThingsGateway.Foundation.Dlt645" Version="$(FoundationVersion)" />
 		<PackageReference Include="ThingsGateway.Foundation.OpcDa" Version="$(FoundationVersion)" />
 		<PackageReference Include="ThingsGateway.Foundation.OpcUa" Version="$(FoundationVersion)" />
 		<PackageReference Include="ThingsGateway.Foundation.SiemensS7" Version="$(FoundationVersion)" />
-
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="BlazorSetParametersAsyncGenerator" Version="$(AdminVersion)"  PrivateAssets="all" OutputItemType="Analyzer" />
 	</ItemGroup>
+	
+	<ItemGroup Condition=" '$(SolutionName)' == 'ThingsGatewayAll' AND '$(Configuration)' != 'Release' ">
+		<ProjectReference Include="..\..\..\ThingsGateway\src\ThingsGateway.Foundation.Razor\ThingsGateway.Foundation.Razor.csproj" />
+		<ProjectReference Include="..\..\..\ThingsGateway.Foundation\src\ThingsGateway.Foundation.Modbus\ThingsGateway.Foundation.Modbus.csproj" />
+		<ProjectReference Include="..\..\..\ThingsGateway.Foundation\src\ThingsGateway.Foundation.Dlt645\ThingsGateway.Foundation.Dlt645.csproj" />
+		<ProjectReference Include="..\..\..\ThingsGateway.Foundation\src\ThingsGateway.Foundation.OpcDa\ThingsGateway.Foundation.OpcDa.csproj" />
+		<ProjectReference Include="..\..\..\ThingsGateway.Foundation\src\ThingsGateway.Foundation.OpcUa\ThingsGateway.Foundation.OpcUa.csproj" />
+		<ProjectReference Include="..\..\..\ThingsGateway.Foundation\src\ThingsGateway.Foundation.SiemensS7\ThingsGateway.Foundation.SiemensS7.csproj" />
+		<ProjectReference Include="..\..\..\ThingsGateway.Admin\src\BlazorSetParametersAsyncGenerator\BlazorSetParametersAsyncGenerator.csproj" PrivateAssets="all" OutputItemType="Analyzer" />
+	</ItemGroup>
+
+
 
 
 
