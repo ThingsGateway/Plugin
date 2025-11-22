@@ -10,6 +10,8 @@
 
 using BootstrapBlazor.Components;
 
+using Newtonsoft.Json.Linq;
+
 using Opc.Ua;
 using Opc.Ua.Server;
 
@@ -295,7 +297,8 @@ public class ThingsGatewayNodeManager : CustomNodeManager2
         object newValue;
         try
         {
-            if (value is JsonNode token) value = token.GetObjectFromJsonNode();
+            if (value is JsonNode jnode) value = jnode.GetObjectFromJsonNode();
+            if (value is JToken token) value = token.GetObjectFromJToken();
 
             if (!tag.IsDataTypeInit && value != null)
             {
