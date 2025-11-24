@@ -13,5 +13,3 @@ global using Microsoft.AspNetCore.Components;
 global using ThingsGateway.Foundation.Common.Extension;
 global using ThingsGateway.Foundation.Common.Json.Extension;
 global using ThingsGateway.Razor;
-
-[assembly: GlobalGenerateSetParametersAsync(true)]
