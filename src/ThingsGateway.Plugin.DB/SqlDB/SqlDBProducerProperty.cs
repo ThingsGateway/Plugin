@@ -19,7 +19,7 @@ public enum DbType
     MySql = 0,
     SqlServer = 1,
     Sqlite = 2,
-    Oracle = 3,
+    //Oracle = 3, //不支持Oracle数据库，需要引用SqlOrm.Plugin
     PostgreSQL = 4,
 }
 public enum SqlDBSplitType
