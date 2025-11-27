@@ -14,7 +14,7 @@
 		</NoWarn>
 		<TouchSocketVersion>4.0.0</TouchSocketVersion>
 		<FoundationVersion>12.4.7</FoundationVersion>
-		<GatewayVersion>12.4.8</GatewayVersion>
+		<GatewayVersion>12.4.10</GatewayVersion>
 		<Version>12.4.8</Version>
 		
 		<LangVersion>preview</LangVersion>
