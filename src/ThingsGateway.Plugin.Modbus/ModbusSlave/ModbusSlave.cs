@@ -25,7 +25,7 @@ using TouchSocket.Core;
 
 namespace ThingsGateway.Plugin.Modbus;
 
-public class ModbusSlave : BusinessBase
+public class ModbusSlave : BusinessBase, IFoundationDevice
 {
     private readonly ModbusSlaveProperty _driverPropertys = new();
 
@@ -36,6 +36,7 @@ public class ModbusSlave : BusinessBase
     private Dictionary<ModbusAddress, VariableRuntime> ModbusVariables;
 
     private ThingsGateway.Foundation.Modbus.ModbusSlave _plc = new();
+    public IDevice? FoundationDevice => _plc;
 
     private volatile bool success = true;
 
