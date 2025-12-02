@@ -64,6 +64,7 @@ public partial class TDengineDBProducer : BusinessBaseWithCacheIntervalVariable
         {
             var exexcuteExpressions = CSharpScriptEngineExtension.Do<DynamicSQLBase>(_driverPropertys.BigTextScriptHistoryTable);
             exexcuteExpressions?.TryDispose();
+            CSharpScriptEngineExtension.Remove(_driverPropertys.BigTextScriptHistoryTable);
         }
         catch
         {

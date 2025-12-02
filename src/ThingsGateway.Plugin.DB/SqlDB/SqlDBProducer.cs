@@ -66,6 +66,7 @@ public partial class SqlDBProducer : BusinessBaseWithCacheIntervalVariable
         {
             var exexcuteExpressions = CSharpScriptEngineExtension.Do<DynamicSQLBase>(_driverPropertys.BigTextScriptHistoryTable);
             exexcuteExpressions?.TryDispose();
+            CSharpScriptEngineExtension.Remove(_driverPropertys.BigTextScriptHistoryTable);
         }
         catch
         {
@@ -74,6 +75,7 @@ public partial class SqlDBProducer : BusinessBaseWithCacheIntervalVariable
         {
             var exexcuteExpressions = CSharpScriptEngineExtension.Do<DynamicSQLBase>(_driverPropertys.BigTextScriptRealTable);
             exexcuteExpressions?.TryDispose();
+            CSharpScriptEngineExtension.Remove(_driverPropertys.BigTextScriptRealTable);
         }
         catch
         {

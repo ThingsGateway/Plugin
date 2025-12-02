@@ -65,6 +65,7 @@ public partial class SqlHistoryAlarm : BusinessBaseWithCacheAlarm
         {
             var exexcuteExpressions = CSharpScriptEngineExtension.Do<DynamicSQLBase>(_driverPropertys.BigTextScriptHistoryTable);
             exexcuteExpressions?.TryDispose();
+            CSharpScriptEngineExtension.Remove(_driverPropertys.BigTextScriptHistoryTable);
         }
         catch
         {
@@ -73,6 +74,7 @@ public partial class SqlHistoryAlarm : BusinessBaseWithCacheAlarm
         {
             var exexcuteExpressions = CSharpScriptEngineExtension.Do<DynamicSQLBase>(_driverPropertys.BigTextScriptPluginEventDataHistoryTable);
             exexcuteExpressions?.TryDispose();
+            CSharpScriptEngineExtension.Remove(_driverPropertys.BigTextScriptPluginEventDataHistoryTable);
         }
         catch
         {

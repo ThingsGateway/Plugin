@@ -25,7 +25,7 @@ using TouchSocket.Core;
 
 namespace ThingsGateway.Plugin.Modbus;
 
-public class ModbusSlave : BusinessBase, IFoundationDevice
+public class ModbusSlave : BusinessReceivedFoundationBase
 {
     private readonly ModbusSlaveProperty _driverPropertys = new();
 
@@ -36,14 +36,10 @@ public class ModbusSlave : BusinessBase, IFoundationDevice
     private Dictionary<ModbusAddress, VariableRuntime> ModbusVariables;
 
     private ThingsGateway.Foundation.Modbus.ModbusSlave _plc = new();
-    public IDevice? FoundationDevice => _plc;
-
-    private volatile bool success = true;
+    public override IReceivedDevice? ReceivedFoundationDevice => _plc;
 
     /// <inheritdoc/>
     public override Type DriverDebugUIType => typeof(ThingsGateway.Debug.ModbusSlave);
-
-
 
     /// <inheritdoc/>
     public override VariablePropertyBase VariablePropertys => _variablePropertys;
@@ -54,20 +50,9 @@ public class ModbusSlave : BusinessBase, IFoundationDevice
     protected IStringLocalizer Localizer { get; private set; }
 
 
-    public override string ToString()
-    {
-        return _plc?.ToString() ?? base.ToString();
-    }
-
 #if !Management
 
-    /// <summary>
-    /// 是否连接成功
-    /// </summary>
-    public override bool IsConnected()
-    {
-        return _plc?.OnLine == true;
-    }
+
     /// <inheritdoc/>
     public override Type DriverUIType
     {
@@ -78,16 +63,6 @@ public class ModbusSlave : BusinessBase, IFoundationDevice
             else
                 return null;
         }
-    }
-
-    /// <summary>
-    /// 开始通讯执行的方法
-    /// </summary>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    protected override async Task ProtectedStartAsync(CancellationToken cancellationToken)
-    {
-        await _plc.ConnectAsync(cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc/>
@@ -160,25 +135,6 @@ public class ModbusSlave : BusinessBase, IFoundationDevice
 
         static async PooledTask ProtectedExecuteAsync(ModbusSlave @this, CancellationToken cancellationToken)
         {
-            //获取设备连接状态
-            if (!@this.IsConnected())
-            {
-                try
-                {
-                    if (cancellationToken.IsCancellationRequested)
-                        return;
-                    await @this._plc.ConnectAsync(cancellationToken).ConfigureAwait(false);
-                    @this.success = true;
-                }
-                catch (ObjectDisposedException) { }
-                catch (Exception ex)
-                {
-                    if (@this.success)
-                        @this.LogMessage?.LogWarning(ex, "Failed to start service");
-                    @this.success = false;
-                    await Task.Delay(10000, cancellationToken).ConfigureAwait(false);
-                }
-            }
             var list = @this.ModbusVariableQueue.ToDictWithDequeue();
             foreach (var item in list)
             {

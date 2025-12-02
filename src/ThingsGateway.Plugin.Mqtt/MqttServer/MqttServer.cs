@@ -102,6 +102,7 @@ public partial class MqttServer : BusinessBaseWithCacheIntervalScriptAll
         {
             var exexcuteExpressions = CSharpScriptEngineExtension.Do<DynamicMqttServerRpcBase>(_driverPropertys.BigTextScriptRpc);
             exexcuteExpressions?.TryDispose();
+            CSharpScriptEngineExtension.Remove(_driverPropertys.BigTextScriptRpc);
         }
         catch
         {

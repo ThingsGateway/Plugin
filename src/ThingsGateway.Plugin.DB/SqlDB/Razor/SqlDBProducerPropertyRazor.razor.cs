@@ -76,7 +76,7 @@ namespace ThingsGateway.Debug
                 var type=  typeof(List<VariableBasicData>);
 
                 var  data = (IEnumerable<object>)Newtonsoft.Json.JsonConvert.DeserializeObject(input, type);
-               var getDeviceModel = CSharpScriptEngineExtension.Do<DynamicSQLBase>(script);
+               var getDeviceModel = CSharpScriptEngineExtension.Do<DynamicSQLBase>(script,TimeSpan.FromHours(1));
             StringBuilder stringBuilder=new($"Compilation successful{Environment.NewLine}");
 
             getDeviceModel.Logger=new EasyLogger(a=>stringBuilder.AppendLine(a));
@@ -196,7 +196,7 @@ namespace ThingsGateway.Debug
                 var type=  typeof(List<VariableBasicData>);
 
                 var  data = (IEnumerable<object>)Newtonsoft.Json.JsonConvert.DeserializeObject(input, type);
-               var getDeviceModel = CSharpScriptEngineExtension.Do<DynamicSQLBase>(script);
+               var getDeviceModel = CSharpScriptEngineExtension.Do<DynamicSQLBase>(script,TimeSpan.FromHours(1));
             StringBuilder stringBuilder=new($"Compilation successful{Environment.NewLine}");
 
             getDeviceModel.Logger=new EasyLogger(a=>stringBuilder.AppendLine(a));

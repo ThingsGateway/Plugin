@@ -6,10 +6,6 @@
 		<IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
 
 	</PropertyGroup>
-	<ItemGroup>
-		<PackageReference Include="ThingsGateway.Gateway.Application" Version="$(GatewayVersion)" />
-		
-	</ItemGroup>
 
 
 	<ItemGroup Condition=" '$(SolutionName)' != 'ThingsGatewayAll' OR '$(Configuration)' == 'Release' ">
