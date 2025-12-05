@@ -34,7 +34,7 @@
 	</ItemGroup>
 
 
-	<ItemGroup Condition=" '$(SolutionName)' != 'ThingsGatewayAll' OR '$(Configuration)' == 'Release' ">
+	<ItemGroup Condition=" ! $([System.String]::Copy('$(SolutionName)').StartsWith('ThingsGatewayAll'))  OR '$(Configuration)' == 'Release' ">
 		<PackageReference Include="ThingsGateway.Foundation.Razor" Version="$(GatewayVersion)" />
 		<PackageReference Include="ThingsGateway.Foundation.Modbus" Version="$(FoundationVersion)" />
 		<PackageReference Include="ThingsGateway.Foundation.Dlt645" Version="$(FoundationVersion)" />
@@ -43,7 +43,7 @@
 		<PackageReference Include="ThingsGateway.Foundation.SiemensS7" Version="$(FoundationVersion)" />
 	</ItemGroup>
 	
-	<ItemGroup Condition=" '$(SolutionName)' == 'ThingsGatewayAll' AND '$(Configuration)' != 'Release' ">
+	<ItemGroup Condition=" $([System.String]::Copy('$(SolutionName)').StartsWith('ThingsGatewayAll'))  AND '$(Configuration)' != 'Release' ">
 		<ProjectReference Include="..\..\..\ThingsGateway\src\ThingsGateway.Foundation.Razor\ThingsGateway.Foundation.Razor.csproj" />
 		<ProjectReference Include="..\..\..\ThingsGateway.Foundation\src\ThingsGateway.Foundation.Modbus\ThingsGateway.Foundation.Modbus.csproj" />
 		<ProjectReference Include="..\..\..\ThingsGateway.Foundation\src\ThingsGateway.Foundation.Dlt645\ThingsGateway.Foundation.Dlt645.csproj" />

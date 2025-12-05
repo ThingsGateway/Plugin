@@ -17,11 +17,11 @@
 
 
 
-	<ItemGroup Condition=" '$(SolutionName)' != 'ThingsGatewayAll' OR '$(Configuration)' == 'Release' ">
+	<ItemGroup Condition=" ! $([System.String]::Copy('$(SolutionName)').StartsWith('ThingsGatewayAll'))  OR '$(Configuration)' == 'Release' ">
 		<PackageReference Include="ThingsGateway.Gateway.Razor.Common" Version="$(GatewayVersion)" />
 	</ItemGroup>
 
-	<ItemGroup Condition=" '$(SolutionName)' == 'ThingsGatewayAll' AND '$(Configuration)' != 'Release' ">
+	<ItemGroup Condition=" $([System.String]::Copy('$(SolutionName)').StartsWith('ThingsGatewayAll'))  AND '$(Configuration)' != 'Release' ">
 		<ProjectReference Include="..\..\..\ThingsGateway\src\ThingsGateway.Gateway.Razor.Common\ThingsGateway.Gateway.Razor.Common.csproj" />
 	</ItemGroup>
 

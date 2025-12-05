@@ -11,7 +11,7 @@
 	</ItemGroup>
 
 
-	<ItemGroup Condition=" '$(SolutionName)' != 'ThingsGatewayAll' OR '$(Configuration)' == 'Release' ">
+	<ItemGroup Condition=" ! $([System.String]::Copy('$(SolutionName)').StartsWith('ThingsGatewayAll'))  OR '$(Configuration)' == 'Release' ">
 		<PackageReference Include="ThingsGateway.Gateway.Razor.Common" Version="$(GatewayVersion)" />
 
 		<PackageReference Include="ThingsGateway.Foundation.Dlt645" Version="$(FoundationVersion)"  GeneratePathProperty="true">
@@ -20,7 +20,7 @@
 		
 	</ItemGroup>
 
-	<ItemGroup Condition=" '$(SolutionName)' == 'ThingsGatewayAll' AND '$(Configuration)' != 'Release' ">
+	<ItemGroup Condition=" $([System.String]::Copy('$(SolutionName)').StartsWith('ThingsGatewayAll'))  AND '$(Configuration)' != 'Release' ">
 		<ProjectReference Include="..\..\..\ThingsGateway.Foundation\src\ThingsGateway.Foundation.Dlt645\ThingsGateway.Foundation.Dlt645.csproj" />
 		<ProjectReference Include="..\..\..\ThingsGateway\src\ThingsGateway.Gateway.Razor.Common\ThingsGateway.Gateway.Razor.Common.csproj" />
 	</ItemGroup>

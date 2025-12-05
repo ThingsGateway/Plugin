@@ -7,11 +7,11 @@
 		<IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
-	<ItemGroup Condition=" '$(SolutionName)' != 'ThingsGatewayAll' OR '$(Configuration)' == 'Release' ">
+	<ItemGroup Condition=" ! $([System.String]::Copy('$(SolutionName)').StartsWith('ThingsGatewayAll'))  OR '$(Configuration)' == 'Release' ">
 		<PackageReference Include="ThingsGateway.Gateway.Application" Version="$(GatewayVersion)" />
 	</ItemGroup>
 
-	<ItemGroup Condition=" '$(SolutionName)' == 'ThingsGatewayAll' AND '$(Configuration)' != 'Release' ">
+	<ItemGroup Condition=" $([System.String]::Copy('$(SolutionName)').StartsWith('ThingsGatewayAll'))  AND '$(Configuration)' != 'Release' ">
 		<ProjectReference Include="..\..\..\ThingsGateway\src\ThingsGateway.Gateway.Application\ThingsGateway.Gateway.Application.csproj" />
 	</ItemGroup>
 
