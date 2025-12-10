@@ -15,4 +15,8 @@ namespace ThingsGateway.Plugin.Webhook;
 /// </summary>
 public class WebhookProperty : BusinessPropertyWithCacheIntervalScript
 {
+    public WebhookProperty()
+    {
+        VariableTopic = "http://127.0.0.1:7502/ThingsGateway/Variable";
+    }
 }
