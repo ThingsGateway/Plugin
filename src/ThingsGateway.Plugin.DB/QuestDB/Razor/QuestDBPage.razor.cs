@@ -20,13 +20,14 @@ namespace ThingsGateway.Plugin.QuestDB;
 public partial class QuestDBPage : IDriverUIBase
 {
     [Parameter, EditorRequired]
-    public object Driver { get; set; }
+    public long DeviceId { get; set; }
 
-    public QuestDBProducer QuestDBProducer => (QuestDBProducer)Driver;
+    public QuestDBProducer QuestDBProducer => GlobalData.ReadOnlyIdDevices.TryGetValue(DeviceId,out DeviceRuntime deviceRuntime)?deviceRuntime.Driver as QuestDBProducer:null;
     private SqlDBPageInput CustomerSearchModel { get; set; } = new();
 
     private async Task<QueryData<QuestDBNumberHistoryValue>> OnQueryAsync(QueryPageOptions options)
     {
+        if(QuestDBProducer==null) throw new Exception("Driver not found");
         var query = await QuestDBProducer.QueryData(options).ConfigureAwait(false);
         return query;
     }

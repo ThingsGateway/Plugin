@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
 
 using ThingsGateway.Common;
+using ThingsGateway.Gateway.Application;
 using ThingsGateway.Razor;
 
 namespace ThingsGateway.Plugin.OpcUa
@@ -22,7 +23,7 @@ namespace ThingsGateway.Plugin.OpcUa
     public partial class OpcUaMasterRuntimeRazor : IDriverUIBase
     {
         [Parameter, EditorRequired]
-        public object Driver { get; set; }
+        public long DeviceId { get; set; }
 
         [Inject]
         private DownloadService DownloadService { get; set; }

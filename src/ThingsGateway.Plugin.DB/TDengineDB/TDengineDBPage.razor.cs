@@ -20,13 +20,15 @@ namespace ThingsGateway.Plugin.TDengineDB;
 public partial class TDengineDBPage : IDriverUIBase
 {
     [Parameter, EditorRequired]
-    public object Driver { get; set; }
+    public long DeviceId { get; set; }
 
-    public TDengineDBProducer TDengineDBProducer => (TDengineDBProducer)Driver;
+    public TDengineDBProducer TDengineDBProducer => GlobalData.ReadOnlyIdDevices.TryGetValue(DeviceId, out DeviceRuntime deviceRuntime) ? deviceRuntime.Driver as TDengineDBProducer : null;
+
     private SqlDBPageInput CustomerSearchModel { get; set; } = new();
 
     private async Task<QueryData<TDengineDBNumberHistoryValue>> OnQueryAsync(QueryPageOptions options)
     {
+        if (TDengineDBProducer == null) throw new Exception("Driver not found");
         var query = await TDengineDBProducer.QueryData(options).ConfigureAwait(false);
         return query;
     }

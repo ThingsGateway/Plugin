@@ -41,7 +41,7 @@ public class Dlt645_2007Master : CollectFoundationBase
     {
         get
         {
-            if (FoundationDevice.Channel?.ChannelType == ChannelTypeEnum.TcpService)
+            if (FoundationDevice.Channel?.ChannelType == ChannelTypeEnum.TcpService || FoundationDevice?.Channel == null)
                 return typeof(ThingsGateway.Gateway.Razor.TcpServiceComponent);
             else
                 return null;

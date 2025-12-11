@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Components;
 
 using ThingsGateway.Common;
 using ThingsGateway.Plugin.DB;
+using ThingsGateway.Plugin.QuestDB;
 
 namespace ThingsGateway.Plugin.SqlDB;
 
@@ -23,18 +24,21 @@ public partial class SqlDBPage : IDriverUIBase
     private readonly SqlDBPageInput _searchReal = new();
 
     [Parameter, EditorRequired]
-    public object Driver { get; set; }
+    public long DeviceId { get; set; }
 
-    public SqlDBProducer SqlDBProducer => (SqlDBProducer)Driver;
+    public SqlDBProducer SqlDBProducer => GlobalData.ReadOnlyIdDevices.TryGetValue(DeviceId, out DeviceRuntime deviceRuntime) ? deviceRuntime.Driver as SqlDBProducer : null;
+
 
     private async Task<QueryData<SQLNumberHistoryValue>> OnQueryHistoryAsync(QueryPageOptions options)
     {
+        if (SqlDBProducer == null) throw new Exception("Driver not found");
         var query = await SqlDBProducer.QueryHistoryData(options).ConfigureAwait(false);
         return query;
     }
 
     private async Task<QueryData<SQLRealValue>> OnQueryRealAsync(QueryPageOptions options)
     {
+        if (SqlDBProducer == null) throw new Exception("Driver not found");
         var query = await SqlDBProducer.QueryRealData(options).ConfigureAwait(false);
         return query;
     }

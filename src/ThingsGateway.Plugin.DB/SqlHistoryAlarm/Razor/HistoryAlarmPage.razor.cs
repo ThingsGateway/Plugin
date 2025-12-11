@@ -13,6 +13,7 @@ using BootstrapBlazor.Components;
 using Microsoft.AspNetCore.Components;
 
 using ThingsGateway.Common;
+using ThingsGateway.Plugin.SqlDB;
 
 namespace ThingsGateway.Plugin.DB;
 
@@ -22,13 +23,16 @@ namespace ThingsGateway.Plugin.DB;
 public partial class HistoryAlarmPage : IDriverUIBase
 {
     [Parameter, EditorRequired]
-    public object Driver { get; set; }
+    public long DeviceId { get; set; }
 
-    public SqlHistoryAlarm SqlHistoryAlarmProducer => (SqlHistoryAlarm)Driver;
+    public SqlHistoryAlarm SqlHistoryAlarmProducer => GlobalData.ReadOnlyIdDevices.TryGetValue(DeviceId, out DeviceRuntime deviceRuntime) ? deviceRuntime.Driver as SqlHistoryAlarm : null;
+
+
     private HistoryAlarmPageInput CustomerSearchModel { get; set; } = new();
 
     private async Task<QueryData<HistoryAlarm>> OnQueryAsync(QueryPageOptions options)
     {
+        if (SqlHistoryAlarmProducer == null) throw new Exception("Driver not found");
         var query = await SqlHistoryAlarmProducer.QueryData(options).ConfigureAwait(false);
         return query;
     }

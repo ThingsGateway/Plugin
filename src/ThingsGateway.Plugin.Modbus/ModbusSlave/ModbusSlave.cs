@@ -58,7 +58,7 @@ public class ModbusSlave : BusinessReceivedFoundationBase
     {
         get
         {
-            if (_plc.Channel?.ChannelType == ChannelTypeEnum.TcpService)
+            if (_plc.Channel?.ChannelType == ChannelTypeEnum.TcpService || _plc?.Channel == null)
                 return typeof(ThingsGateway.Gateway.Razor.TcpServiceComponent);
             else
                 return null;
