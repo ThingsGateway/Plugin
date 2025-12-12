@@ -304,6 +304,10 @@ public partial class SqlDBProducer : BusinessBaseWithCacheIntervalVariable
 
     internal async Task<QueryData<SQLNumberHistoryValue>> QueryHistoryData(QueryPageOptions option)
     {
+        if(_driverPropertys.IsHistoryDB==false)
+        {
+            return new();
+        }
         var db = SqlDBBusinessDatabaseUtil.GetDb(_driverPropertys);
         var ret = new QueryData<SQLNumberHistoryValue>()
         {
@@ -344,6 +348,10 @@ public partial class SqlDBProducer : BusinessBaseWithCacheIntervalVariable
 
     internal async Task<QueryData<SQLRealValue>> QueryRealData(QueryPageOptions option)
     {
+        if (_driverPropertys.IsReadDB == false)
+        {
+            return new();
+        }
         var db = SqlDBBusinessDatabaseUtil.GetDb(_driverPropertys);
         var ret = new QueryData<SQLRealValue>()
         {

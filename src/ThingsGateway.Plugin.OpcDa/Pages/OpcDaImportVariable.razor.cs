@@ -223,7 +223,12 @@ public partial class OpcDaImportVariable
             await ToastService.Warn(ex);
         }
     }
-
+    [Inject]
+    IChannelModelPageService ChannelModelPageService { get; set; }
+    [Inject]
+    IDeviceModelPageService DeviceModelPageService { get; set; }
+    [Inject]
+    IVariableModelPageService VariableModelPageService { get; set; }
     private async Task OnClickSave()
     {
         try
@@ -235,9 +240,10 @@ public partial class OpcDaImportVariable
                 await ToastService.Warning(OpcDaPropertyLocalizer["NoVariablesAvailable"], OpcDaPropertyLocalizer["NoVariablesAvailable"]);
                 return;
             }
-            await App.RootServices.GetRequiredService<IChannelRuntimeService>().SaveChannelAsync(data.Item1, ItemChangedType.Add, true);
-            await App.RootServices.GetRequiredService<IDeviceRuntimeService>().SaveDeviceAsync(data.Item2, ItemChangedType.Add, true);
-            await App.RootServices.GetRequiredService<IVariableRuntimeService>().BatchSaveVariableAsync(data.Item3, ItemChangedType.Add, true);
+            await ChannelModelPageService.SaveChannelAsync(data.Item1, ItemChangedType.Add, true);
+            await DeviceModelPageService.SaveDeviceAsync(data.Item2, ItemChangedType.Add, true);
+            await VariableModelPageService.BatchSaveVariableAsync(data.Item3.ToList(), ItemChangedType.Add, true);
+
             await ToastService.Default();
         }
         catch (Exception ex)
@@ -333,8 +339,7 @@ public partial class OpcDaImportVariable
     /// <returns></returns>
     public async Task DownChannelExportAsync(Channel data)
     {
-        using var memoryStream = await App.RootServices.GetRequiredService<IChannelRuntimeService>().ExportMemoryStream(new List<Channel>() { data });
-        await DownloadService.DownloadFromStreamAsync($"channel{DateTime.Now.ToFileDateTimeFormat()}.xlsx", memoryStream);
+         await App.RootServices.GetRequiredService<ThingsGateway.Gateway.Razor.IGatewayExportService>().OnChannelExport(new List<Channel>() { data });
     }
 
     /// <summary>
@@ -343,8 +348,8 @@ public partial class OpcDaImportVariable
     /// <returns></returns>
     public async Task DownDeviceExportAsync(Device data, string channelName, string plugin)
     {
-        using var memoryStream = await App.RootServices.GetRequiredService<IDeviceRuntimeService>().ExportMemoryStream(new List<Device>() { data }, channelName, plugin);
-        await DownloadService.DownloadFromStreamAsync($"device{DateTime.Now.ToFileDateTimeFormat()}.xlsx", memoryStream);
+         await App.RootServices.GetRequiredService<ThingsGateway.Gateway.Razor.IGatewayExportService>().OnDeviceExport(new List<Device>() { data }, channelName, plugin);
+        
     }
 
     /// <summary>
@@ -353,8 +358,7 @@ public partial class OpcDaImportVariable
     /// <returns></returns>
     public async Task DownDeviceVariableExportAsync(List<Variable> data, string devName)
     {
-        using var memoryStream = await App.RootServices.GetRequiredService<IVariableRuntimeService>().ExportMemoryStream(data, devName);
-        await DownloadService.DownloadFromStreamAsync($"variable{DateTime.Now.ToFileDateTimeFormat()}.xlsx", memoryStream);
+        await App.RootServices.GetRequiredService < ThingsGateway.Gateway.Razor.IGatewayExportService > ().OnVariableExport(data, devName);
     }
 
 #endif

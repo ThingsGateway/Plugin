@@ -11,9 +11,18 @@
 using BootstrapBlazor.Components;
 
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.DependencyInjection;
 
 using ThingsGateway.Common;
+using ThingsGateway.Plugin.QuestDB;
 using ThingsGateway.Plugin.SqlDB;
+
+using TouchSocket.Core;
+
+using TouchSocket.Dmtp.Rpc;
+
+using TouchSocket.Rpc;
+using TouchSocket.Rpc.DmtpRpc.Generators;
 
 namespace ThingsGateway.Plugin.DB;
 
@@ -25,15 +34,35 @@ public partial class HistoryAlarmPage : IDriverUIBase
     [Parameter, EditorRequired]
     public long DeviceId { get; set; }
 
-    public SqlHistoryAlarm SqlHistoryAlarmProducer => GlobalData.ReadOnlyIdDevices.TryGetValue(DeviceId, out DeviceRuntime deviceRuntime) ? deviceRuntime.Driver as SqlHistoryAlarm : null;
 
 
     private HistoryAlarmPageInput CustomerSearchModel { get; set; } = new();
 
+
+    [Inject]
+    private IServiceProvider ServiceProvider { get; set; }
+
+    private DmtpInvokeOption invokeOption = new DmtpInvokeOption(60000)//调用配置
+    {
+        FeedbackType = FeedbackType.WaitInvoke,//调用反馈类型
+        SerializationType = SerializationType.Json,//序列化类型
+    };
+
+
     private async Task<QueryData<HistoryAlarm>> OnQueryAsync(QueryPageOptions options)
     {
-        if (SqlHistoryAlarmProducer == null) throw new Exception("Driver not found");
-        var query = await SqlHistoryAlarmProducer.QueryData(options).ConfigureAwait(false);
-        return query;
+
+        var dmtpActorContext = ServiceProvider.GetService<DmtpActorContext>();
+        if (dmtpActorContext != null)
+        {
+            return await dmtpActorContext.Current.GetDmtpRpcActor().OnHistoryAlarmQueryAsync(DeviceId, options, invokeOption).ConfigureAwait(false);
+        }
+        else
+        {
+            SqlHistoryAlarm SqlHistoryAlarmProducer = GlobalData.ReadOnlyIdDevices.TryGetValue(DeviceId, out DeviceRuntime deviceRuntime) ? deviceRuntime.Driver as SqlHistoryAlarm : null;
+            if (SqlHistoryAlarmProducer == null) throw new Exception("Driver not found");
+            var query = await SqlHistoryAlarmProducer.QueryData(options).ConfigureAwait(false);
+            return query;
+        }
     }
 }

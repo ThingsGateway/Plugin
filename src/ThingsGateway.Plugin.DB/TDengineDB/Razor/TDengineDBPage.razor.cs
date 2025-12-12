@@ -21,12 +21,13 @@ using TouchSocket.Dmtp.Rpc;
 using TouchSocket.Rpc;
 using TouchSocket.Rpc.DmtpRpc.Generators;
 
-namespace ThingsGateway.Plugin.QuestDB;
+namespace ThingsGateway.Plugin.TDengineDB;
 
-public partial class QuestDBPage : IDriverUIBase
+public partial class TDengineDBPage : IDriverUIBase
 {
     [Parameter, EditorRequired]
     public long DeviceId { get; set; }
+
 
     private SqlDBPageInput CustomerSearchModel { get; set; } = new();
 
@@ -38,19 +39,21 @@ public partial class QuestDBPage : IDriverUIBase
         FeedbackType = FeedbackType.WaitInvoke,//调用反馈类型
         SerializationType = SerializationType.Json,//序列化类型
     };
-    private async Task<QueryData<QuestDBNumberHistoryValue>> OnQueryAsync(QueryPageOptions options)
+
+
+    private async Task<QueryData<TDengineDBNumberHistoryValue>> OnQueryAsync(QueryPageOptions options)
     {
 
         var dmtpActorContext = ServiceProvider.GetService<DmtpActorContext>();
         if (dmtpActorContext != null)
         {
-            return await dmtpActorContext.Current.GetDmtpRpcActor().OnQuestDBQueryAsync(DeviceId, options, invokeOption).ConfigureAwait(false);
+            return await dmtpActorContext.Current.GetDmtpRpcActor().OnTDengineDBQueryAsync(DeviceId, options, invokeOption).ConfigureAwait(false);
         }
         else
         {
-            QuestDBProducer QuestDBProducer = GlobalData.ReadOnlyIdDevices.TryGetValue(DeviceId, out DeviceRuntime deviceRuntime) ? deviceRuntime.Driver as QuestDBProducer : null;
-            if (QuestDBProducer == null) throw new Exception("Driver not found");
-            var query = await QuestDBProducer.QueryData(options).ConfigureAwait(false);
+            TDengineDBProducer TDengineDBProducer = GlobalData.ReadOnlyIdDevices.TryGetValue(DeviceId, out DeviceRuntime deviceRuntime) ? deviceRuntime.Driver as TDengineDBProducer : null;
+            if (TDengineDBProducer == null) throw new Exception("Driver not found");
+            var query = await TDengineDBProducer.QueryData(options).ConfigureAwait(false);
             return query;
         }
     }

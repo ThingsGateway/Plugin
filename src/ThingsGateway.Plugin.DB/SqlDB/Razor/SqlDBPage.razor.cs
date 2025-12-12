@@ -11,10 +11,16 @@
 using BootstrapBlazor.Components;
 
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.DependencyInjection;
 
 using ThingsGateway.Common;
 using ThingsGateway.Plugin.DB;
 using ThingsGateway.Plugin.QuestDB;
+
+using TouchSocket.Core;
+using TouchSocket.Dmtp.Rpc;
+using TouchSocket.Rpc;
+using TouchSocket.Rpc.DmtpRpc.Generators;
 
 namespace ThingsGateway.Plugin.SqlDB;
 
@@ -26,20 +32,46 @@ public partial class SqlDBPage : IDriverUIBase
     [Parameter, EditorRequired]
     public long DeviceId { get; set; }
 
-    public SqlDBProducer SqlDBProducer => GlobalData.ReadOnlyIdDevices.TryGetValue(DeviceId, out DeviceRuntime deviceRuntime) ? deviceRuntime.Driver as SqlDBProducer : null;
 
 
-    private async Task<QueryData<SQLNumberHistoryValue>> OnQueryHistoryAsync(QueryPageOptions options)
+    [Inject]
+    private IServiceProvider ServiceProvider { get; set; }
+
+    private DmtpInvokeOption invokeOption = new DmtpInvokeOption(60000)//调用配置
     {
+        FeedbackType = FeedbackType.WaitInvoke,//调用反馈类型
+        SerializationType = SerializationType.Json,//序列化类型
+    };
+ 
+            private async Task<QueryData<SQLNumberHistoryValue>> OnQueryHistoryAsync(QueryPageOptions options)
+    {
+        var dmtpActorContext = ServiceProvider.GetService<DmtpActorContext>();
+        if (dmtpActorContext != null)
+        {
+            return await dmtpActorContext.Current.GetDmtpRpcActor().OnSqlDBQueryHistoryAsync(DeviceId, options, invokeOption).ConfigureAwait(false);
+        }
+        else
+        {
+            SqlDBProducer SqlDBProducer = GlobalData.ReadOnlyIdDevices.TryGetValue(DeviceId, out DeviceRuntime deviceRuntime) ? deviceRuntime.Driver as SqlDBProducer : null;
         if (SqlDBProducer == null) throw new Exception("Driver not found");
         var query = await SqlDBProducer.QueryHistoryData(options).ConfigureAwait(false);
         return query;
+        }
     }
 
     private async Task<QueryData<SQLRealValue>> OnQueryRealAsync(QueryPageOptions options)
     {
+        var dmtpActorContext = ServiceProvider.GetService<DmtpActorContext>();
+        if (dmtpActorContext != null)
+        {
+            return await dmtpActorContext.Current.GetDmtpRpcActor().OnSqlDBQueryRealAsync(DeviceId, options, invokeOption).ConfigureAwait(false);
+        }
+        else
+        {
+            SqlDBProducer SqlDBProducer = GlobalData.ReadOnlyIdDevices.TryGetValue(DeviceId, out DeviceRuntime deviceRuntime) ? deviceRuntime.Driver as SqlDBProducer : null;
         if (SqlDBProducer == null) throw new Exception("Driver not found");
         var query = await SqlDBProducer.QueryRealData(options).ConfigureAwait(false);
         return query;
+    }
     }
 }
