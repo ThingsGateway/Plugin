@@ -304,7 +304,7 @@ public partial class SqlDBProducer : BusinessBaseWithCacheIntervalVariable
 
     internal async Task<QueryData<SQLNumberHistoryValue>> QueryHistoryData(QueryPageOptions option)
     {
-        if(_driverPropertys.IsHistoryDB==false)
+        if (_driverPropertys.IsHistoryDB == false)
         {
             return new();
         }

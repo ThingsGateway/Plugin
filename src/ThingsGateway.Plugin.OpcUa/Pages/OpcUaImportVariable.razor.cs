@@ -393,15 +393,15 @@ public partial class OpcUaImportVariable
 
     [Inject]
     private DownloadService DownloadService { get; set; }
- 
-   
+
+
     /// <summary>
     /// 导出到excel
     /// </summary>
     /// <returns></returns>
     public async Task DownChannelExportAsync(Channel data)
     {
-         await App.RootServices.GetRequiredService<ThingsGateway.Gateway.Razor.IGatewayExportService>().OnChannelExport(new List<Channel>() { data });
+        await App.RootServices.GetRequiredService<ThingsGateway.Gateway.Razor.IGatewayExportService>().OnChannelExport(new List<Channel>() { data });
     }
 
     /// <summary>
@@ -410,8 +410,8 @@ public partial class OpcUaImportVariable
     /// <returns></returns>
     public async Task DownDeviceExportAsync(Device data, string channelName, string plugin)
     {
-         await App.RootServices.GetRequiredService<ThingsGateway.Gateway.Razor.IGatewayExportService>().OnDeviceExport(new List<Device>() { data }, channelName, plugin);
-        
+        await App.RootServices.GetRequiredService<ThingsGateway.Gateway.Razor.IGatewayExportService>().OnDeviceExport(new List<Device>() { data }, channelName, plugin);
+
     }
 
     /// <summary>
@@ -420,7 +420,7 @@ public partial class OpcUaImportVariable
     /// <returns></returns>
     public async Task DownDeviceVariableExportAsync(List<Variable> data, string devName)
     {
-        await App.RootServices.GetRequiredService < ThingsGateway.Gateway.Razor.IGatewayExportService > ().OnVariableExport(data, devName);
+        await App.RootServices.GetRequiredService<ThingsGateway.Gateway.Razor.IGatewayExportService>().OnVariableExport(data, devName);
     }
 
 #endif

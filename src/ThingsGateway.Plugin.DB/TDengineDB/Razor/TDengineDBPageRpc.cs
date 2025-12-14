@@ -10,8 +10,6 @@
 
 using BootstrapBlazor.Components;
 
-using ThingsGateway.Gateway.Application;
-using ThingsGateway.Plugin.QuestDB;
 using ThingsGateway.Plugin.TDengineDB;
 
 using TouchSocket.Dmtp.Rpc;

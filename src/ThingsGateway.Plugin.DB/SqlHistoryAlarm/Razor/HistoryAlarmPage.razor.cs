@@ -14,8 +14,6 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 
 using ThingsGateway.Common;
-using ThingsGateway.Plugin.QuestDB;
-using ThingsGateway.Plugin.SqlDB;
 
 using TouchSocket.Core;
 

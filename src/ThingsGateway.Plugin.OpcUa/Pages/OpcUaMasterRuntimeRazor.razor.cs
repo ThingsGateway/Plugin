@@ -15,7 +15,6 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
 
 using ThingsGateway.Common;
-using ThingsGateway.Gateway.Application;
 using ThingsGateway.Razor;
 
 namespace ThingsGateway.Plugin.OpcUa

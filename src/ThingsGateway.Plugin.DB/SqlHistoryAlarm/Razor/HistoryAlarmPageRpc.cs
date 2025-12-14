@@ -10,9 +10,6 @@
 
 using BootstrapBlazor.Components;
 
-using ThingsGateway.Gateway.Application;
-using ThingsGateway.Plugin.QuestDB;
-
 using TouchSocket.Dmtp.Rpc;
 using TouchSocket.Rpc;
 
@@ -22,7 +19,7 @@ namespace ThingsGateway.Plugin.DB;
 internal interface IHistoryAlarmPageRpc : IRpcServer
 {
     [DmtpRpc]
-    public  Task<QueryData<HistoryAlarm>> OnHistoryAlarmQueryAsync(long deviceId, QueryPageOptions options);
+    public Task<QueryData<HistoryAlarm>> OnHistoryAlarmQueryAsync(long deviceId, QueryPageOptions options);
 }
 public partial class HistoryAlarmPageRpc : SingletonRpcServer, IPluginRpcServer, IHistoryAlarmPageRpc
 {

@@ -15,7 +15,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 using ThingsGateway.Common;
 using ThingsGateway.Plugin.DB;
-using ThingsGateway.Plugin.QuestDB;
 
 using TouchSocket.Core;
 using TouchSocket.Dmtp.Rpc;
@@ -42,8 +41,8 @@ public partial class SqlDBPage : IDriverUIBase
         FeedbackType = FeedbackType.WaitInvoke,//调用反馈类型
         SerializationType = SerializationType.Json,//序列化类型
     };
- 
-            private async Task<QueryData<SQLNumberHistoryValue>> OnQueryHistoryAsync(QueryPageOptions options)
+
+    private async Task<QueryData<SQLNumberHistoryValue>> OnQueryHistoryAsync(QueryPageOptions options)
     {
         var dmtpActorContext = ServiceProvider.GetService<DmtpActorContext>();
         if (dmtpActorContext != null)
@@ -53,9 +52,9 @@ public partial class SqlDBPage : IDriverUIBase
         else
         {
             SqlDBProducer SqlDBProducer = GlobalData.ReadOnlyIdDevices.TryGetValue(DeviceId, out DeviceRuntime deviceRuntime) ? deviceRuntime.Driver as SqlDBProducer : null;
-        if (SqlDBProducer == null) throw new Exception("Driver not found");
-        var query = await SqlDBProducer.QueryHistoryData(options).ConfigureAwait(false);
-        return query;
+            if (SqlDBProducer == null) throw new Exception("Driver not found");
+            var query = await SqlDBProducer.QueryHistoryData(options).ConfigureAwait(false);
+            return query;
         }
     }
 
@@ -69,9 +68,9 @@ public partial class SqlDBPage : IDriverUIBase
         else
         {
             SqlDBProducer SqlDBProducer = GlobalData.ReadOnlyIdDevices.TryGetValue(DeviceId, out DeviceRuntime deviceRuntime) ? deviceRuntime.Driver as SqlDBProducer : null;
-        if (SqlDBProducer == null) throw new Exception("Driver not found");
-        var query = await SqlDBProducer.QueryRealData(options).ConfigureAwait(false);
-        return query;
-    }
+            if (SqlDBProducer == null) throw new Exception("Driver not found");
+            var query = await SqlDBProducer.QueryRealData(options).ConfigureAwait(false);
+            return query;
+        }
     }
 }
