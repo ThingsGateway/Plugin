@@ -16,6 +16,7 @@
     "RpcQuestTopic": "RpcQuestTopic",
     "RpcWriteTopic": "RpcWriteTopic",
     "TLS": "TLS",
+    "SslProtocols": "SslProtocols",
     "UserName": "UserName",
     "WebSocketUrl": "WebSocketUrl",
     "BigTextScriptRpc": "BigTextScriptRpc"

@@ -117,17 +117,28 @@ public partial class MqttClient : BusinessBaseWithCacheIntervalScriptAll
 
         if (_driverPropertys.TLS)
         {
+            if(_driverPropertys.CAFile.IsNullOrEmpty())
+            {
+                throw new Exception("CAFile不能为空");
+            }
 #if NET10_0_OR_GREATER
             var caCert = X509CertificateLoader.LoadCertificateFromFile(_driverPropertys.CAFile);
 #else
             var caCert = new X509Certificate2(_driverPropertys.CAFile);
 #endif
-            var clientCert = LoadCertificate(_driverPropertys.ClientCertificateFile, _driverPropertys.ClientKeyFile);
-            mqttClientOptionsBuilder = mqttClientOptionsBuilder.WithTlsOptions(a => a
-                    .WithTrustChain(new X509Certificate2Collection(caCert))
-                    .WithClientCertificates(new X509Certificate2Collection(clientCert))
-                    .WithCertificateValidationHandler((a) => true)
-                    );
+            mqttClientOptionsBuilder = mqttClientOptionsBuilder.WithTlsOptions(a =>
+            {
+                a.WithTrustChain(new X509Certificate2Collection(caCert));
+                if (!_driverPropertys.ClientCertificateFile.IsNullOrEmpty() && !_driverPropertys.ClientKeyFile.IsNullOrEmpty())
+                {
+                    var clientCert = LoadCertificate(_driverPropertys.ClientCertificateFile, _driverPropertys.ClientKeyFile);
+                    a.WithClientCertificates(new X509Certificate2Collection(clientCert));
+                }
+                a.WithSslProtocols(_driverPropertys.SslProtocols);
+                a.WithCertificateValidationHandler((a) => true);
+            }
+            );
+
         }
 
 #else

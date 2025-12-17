@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Components.Forms;
 
 using MQTTnet.Formatter;
 using MQTTnet.Protocol;
+using System.Security.Authentication;
 
 namespace ThingsGateway.Plugin.Mqtt;
 
@@ -42,6 +43,12 @@ public class MqttClientProperty : BusinessPropertyWithCacheIntervalScript
 
     [DynamicProperty]
     public bool TLS { get; set; } = false;
+
+    [DynamicProperty]
+    [AutoGenerateColumn(ComponentType =typeof(MultiSelect<SslProtocols>))]
+#pragma warning disable CA5398 // 避免硬编码的 SslProtocols 值
+    public SslProtocols SslProtocols { get; set; } = SslProtocols.Tls12 | SslProtocols.Tls13;
+#pragma warning restore CA5398 // 避免硬编码的 SslProtocols 值
 
     [AutoGenerateColumn(Ignore = true)]
     [DynamicProperty]

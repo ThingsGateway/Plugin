@@ -16,6 +16,7 @@
     "RpcQuestTopic": "Rpc请求数据主题",
     "RpcWriteTopic": "Rpc写入主题",
     "TLS": "TLS",
+    "SslProtocols": "SslProtocols",
     "UserName": "用户名",
     "WebSocketUrl": "WebSocketUrl",
     "BigTextScriptRpc": "RPC脚本"
