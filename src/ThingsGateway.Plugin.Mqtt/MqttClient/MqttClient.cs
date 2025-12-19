@@ -117,7 +117,7 @@ public partial class MqttClient : BusinessBaseWithCacheIntervalScriptAll
 
         if (_driverPropertys.TLS)
         {
-            if(_driverPropertys.CAFile.IsNullOrEmpty())
+            if (_driverPropertys.CAFile.IsNullOrEmpty())
             {
                 throw new Exception("CAFile不能为空");
             }

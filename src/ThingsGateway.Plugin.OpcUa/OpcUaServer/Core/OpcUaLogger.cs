@@ -9,7 +9,7 @@
 //------------------------------------------------------------------------------
 
 using Microsoft.Extensions.Logging;
-
+using Opc.Ua;
 using TouchSocket.Core;
 
 #pragma warning disable CS8633 // 类型参数的约束中的为 Null 性与隐式实现接口方法中的类型参数的约束不匹配。
@@ -18,6 +18,35 @@ using TouchSocket.Core;
 
 namespace ThingsGateway.Plugin.OpcUa;
 
+public class OpcUaTelemetryContext : TelemetryContextBase
+{
+    public OpcUaTelemetryContext(ILog log)
+        : base(Microsoft.Extensions.Logging.LoggerFactory.Create(builder =>
+        {
+            builder.ClearProviders()
+                .AddProvider(new OpcUaLoggerProvider(log));
+        }))
+    {
+    }
+}
+
+public sealed class OpcUaLoggerProvider : ILoggerProvider
+{
+    private ILog Log { get; }
+    public OpcUaLoggerProvider(ILog log)
+    {
+        Log = log;
+    }
+    public ILogger CreateLogger(string categoryName)
+    {
+        return new OpcUaLogger(Log);
+    }
+
+    public void Dispose()
+    {
+
+    }
+}
 internal sealed class OpcUaLogger : ILogger
 {
     private ILog _log;

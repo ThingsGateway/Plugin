@@ -819,7 +819,7 @@ public class ThingsGatewayNodeManager : CustomNodeManager2
                 }
 
                 // report the write value audit event 
-                Server.ReportAuditWriteUpdateEvent(systemContext, nodeToWrite, oldValue?.Value, errors[ii]?.StatusCode ?? StatusCodes.Good);
+                Server.ReportAuditWriteUpdateEvent(systemContext, nodeToWrite, oldValue?.Value, errors[ii]?.StatusCode ?? StatusCodes.Good, m_logger);
 
                 if (!ServiceResult.IsGood(errors[ii]))
                 {

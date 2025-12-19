@@ -16,8 +16,6 @@ using Opc.Ua.Bindings;
 using Opc.Ua.Configuration;
 
 using System.Collections.Concurrent;
-using System.Reflection;
-
 using ThingsGateway.Foundation.Common;
 using ThingsGateway.Foundation.Common.DictionaryExtensions;
 using ThingsGateway.Foundation.Common.Extension;
@@ -91,7 +89,8 @@ public partial class OpcUaServer : BusinessBase
 
         //动态更新UA库节点暂时取消
         //m_server?.NodeManager?.RefreshVariable();
-        m_server?.Stop();
+        if (m_server != null)
+            await m_server.StopAsync(CancellationToken.None).ConfigureAwait(false);
     }
 
     protected override async Task InitChannelAsync(IChannel? channel, CancellationToken cancellationToken)
@@ -104,13 +103,12 @@ public partial class OpcUaServer : BusinessBase
 
         await base.InitChannelAsync(channel, cancellationToken).ConfigureAwait(false);
     }
-
+    internal OpcUaTelemetryContext DefaultTelemetryContext;
     private async Task UaInit()
     {
         ApplicationInstance.MessageDlg = new ApplicationMessageDlg(LogMessage);//默认返回true
-
-        //Utils.SetLogger(new OpcUaLogger(LogMessage)); //调试用途
-        m_application = new ApplicationInstance();
+        DefaultTelemetryContext = new OpcUaTelemetryContext(LogMessage);
+        m_application = new ApplicationInstance(DefaultTelemetryContext);
         m_configuration = await GetDefaultConfigurationAsync().ConfigureAwait(false);
         await m_configuration.ValidateAsync(ApplicationType.Server).ConfigureAwait(false);
         m_application.ApplicationConfiguration = m_configuration;
@@ -122,10 +120,10 @@ public partial class OpcUaServer : BusinessBase
         m_server = new(this);
         await m_server.CreateUserIdentityValidators(m_configuration).ConfigureAwait(false);
     }
-    private void UaDispose()
+    private async Task UaDisposeAsync()
     {
         ApplicationInstance.MessageDlg = null;
-
+        DefaultTelemetryContext?.LoggerFactory.TryDispose();
         if (m_server != null)
         {
             try
@@ -139,9 +137,6 @@ public partial class OpcUaServer : BusinessBase
                     m_server.MessageContext.Factory.TryDispose();
                 }
 
-                typeof(EncodeableFactory).GetField("s_globalFactory", BindingFlags.NonPublic | BindingFlags.Static)?.SetValue(null, new EncodeableFactory());
-                typeof(ServiceMessageContext).GetField("s_globalContext", BindingFlags.NonPublic | BindingFlags.Static)?.SetValue(null, typeof(ServiceMessageContext).GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { typeof(bool) }, null).Invoke(new object[] { true }));
-
                 var listeners = m_server.GetValueEx(m_server.GetType(), "TransportListeners") as List<ITransportListener>;
                 if (listeners != null)
                 {
@@ -150,7 +145,7 @@ public partial class OpcUaServer : BusinessBase
                         if (item is TcpTransportListener transportListener)
                         {
                             var timer = transportListener.GetValueEx(transportListener.GetType(), "m_inactivityDetectionTimer") as IDisposable;
-                            timer?.Dispose();
+                            timer?.TryDispose();
                         }
                     }
                 }
@@ -159,7 +154,8 @@ public partial class OpcUaServer : BusinessBase
             {
             }
         }
-        m_server?.Stop();
+        if (m_server != null)
+            await m_server.StopAsync(CancellationToken.None).ConfigureAwait(false);
         m_server?.NodeManager?.TryDispose();
         m_server?.TryDispose();
     }
@@ -177,13 +173,13 @@ public partial class OpcUaServer : BusinessBase
     }
 
     /// <inheritdoc/>
-    protected override Task DisposeAsync(bool disposing)
+    protected override async Task DisposeAsync(bool disposing)
     {
         GlobalData.VariableValueChangeEvent -= VariableValueChange;
-        UaDispose();
+        await UaDisposeAsync().ConfigureAwait(false);
         CollectVariableRuntimes?.Clear();
         IdVariableRuntimes?.Clear();
-        return base.DisposeAsync(disposing);
+        await base.DisposeAsync(disposing).ConfigureAwait(false);
     }
 
     protected override async Task ProtectedStartAsync(CancellationToken cancellationToken)
@@ -432,7 +428,7 @@ public partial class OpcUaServer : BusinessBase
         config.ClientConfiguration = new ClientConfiguration { DefaultSessionTimeout = 60000 };
         config.TraceConfiguration = new TraceConfiguration();
 
-        config.CertificateValidator = new CertificateValidator();
+        config.CertificateValidator = new CertificateValidator(DefaultTelemetryContext);
         await config.CertificateValidator.UpdateAsync(config).ConfigureAwait(false);
         config.Extensions = new XmlElementCollection();
 

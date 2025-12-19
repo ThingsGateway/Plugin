@@ -45,7 +45,7 @@ public class MqttClientProperty : BusinessPropertyWithCacheIntervalScript
     public bool TLS { get; set; } = false;
 
     [DynamicProperty]
-    [AutoGenerateColumn(ComponentType =typeof(MultiSelect<SslProtocols>))]
+    [AutoGenerateColumn(ComponentType = typeof(MultiSelect<SslProtocols>))]
 #pragma warning disable CA5398 // 避免硬编码的 SslProtocols 值
     public SslProtocols SslProtocols { get; set; } = SslProtocols.Tls12 | SslProtocols.Tls13;
 #pragma warning restore CA5398 // 避免硬编码的 SslProtocols 值

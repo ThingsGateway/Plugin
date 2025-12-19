@@ -87,7 +87,7 @@ public partial class OpcUaImportVariable
         if (item?.Value?.Tag?.NodeId != null && Plc != null)
         {
             ClickItem = item;
-            NodeAttributes = await Plc.ReadNoteAttributesAsync(ClickItem.Value.NodeId.ToString(), default).ConfigureAwait(false);
+            NodeAttributes = await Plc.ReadNoteAttributesAsync(ClickItem.Value.NodeId, default).ConfigureAwait(false);
         }
         await InvokeAsync(StateHasChanged);
     }

@@ -15,9 +15,8 @@ using Opc.Ua;
 using Opc.Ua.Server;
 
 using System.Security.Cryptography.X509Certificates;
-
+using System.Text;
 using ThingsGateway.Admin.Application;
-
 using TouchSocket.Core;
 
 namespace ThingsGateway.Plugin.OpcUa;
@@ -114,16 +113,12 @@ public partial class ThingsGatewayServer : StandardServer
     protected override void OnServerStarting(ApplicationConfiguration configuration)
     {
         base.OnServerStarting(configuration);
-
-        // 由应用程序决定如何验证用户身份令牌。
-        // 此函数为 X509 身份令牌创建验证器。
     }
 
-    /// <inheritdoc/>
-    protected override void OnServerStopping()
+    protected override ValueTask OnServerStoppingAsync(CancellationToken cancellationToken = default)
     {
         _opcUaServer.LogMessage?.LogInformation("OPCUAServer Stoping");
-        base.OnServerStopping();
+        return base.OnServerStoppingAsync(cancellationToken);
     }
 
     public async Task CreateUserIdentityValidators(ApplicationConfiguration configuration)
@@ -139,7 +134,7 @@ public partial class ThingsGatewayServer : StandardServer
                 if (configuration.SecurityConfiguration.TrustedUserCertificates != null &&
                     configuration.SecurityConfiguration.UserIssuerCertificates != null)
                 {
-                    CertificateValidator certificateValidator = new();
+                    CertificateValidator certificateValidator = new(_opcUaServer.DefaultTelemetryContext);
                     await certificateValidator.UpdateAsync(configuration).ConfigureAwait(false);
                     certificateValidator.Update(configuration.SecurityConfiguration.UserIssuerCertificates,
                         configuration.SecurityConfiguration.TrustedUserCertificates,
@@ -179,8 +174,6 @@ public partial class ThingsGatewayServer : StandardServer
         {
             VerifyUserTokenCertificate(x509Token.Certificate);
             args.Identity = new UserIdentity(x509Token);
-            Utils.LogInfo(Utils.TraceMasks.Security, "X509 Token Accepted: {0}", args.Identity?.DisplayName);
-
             // set AuthenticatedUser role for accepted certificate authentication
             args.Identity.GrantedRoleIds.Add(ObjectIds.WellKnownRole_AuthenticatedUser);
 
@@ -218,7 +211,7 @@ public partial class ThingsGatewayServer : StandardServer
                 "Security cancellationToken is not a valid username cancellationToken. An empty username is not accepted.");
         }
 
-        if (string.IsNullOrEmpty(password))
+        if (password == null || password.Length == 0)
         {
             // an empty password is not accepted.
             throw ServiceResultException.Create(StatusCodes.BadIdentityTokenRejected,
@@ -235,15 +228,12 @@ public partial class ThingsGatewayServer : StandardServer
                 "Invalid username or password.",
                 userName);
 
+
             // create an exception with a vendor defined sub-code.
-            throw new ServiceResultException(new ServiceResult(
-                StatusCodes.BadUserAccessDenied,
-                "InvalidPassword",
-                LoadServerProperties().ProductUri,
-                new LocalizedText(info)));
+            throw new ServiceResultException(new ServiceResult(StatusCodes.BadUserAccessDenied, new LocalizedText(info)));
         }
         // 有权配置服务器的用户
-        if (userName == userInfo.Account && password == userInfo.Password)
+        if (userName == userInfo.Account && password.SequenceEqual(Encoding.UTF8.GetBytes(userInfo.Password)))
         {
             return new SystemConfigurationIdentity(new UserIdentity(userNameToken));
         }
@@ -259,11 +249,11 @@ public partial class ThingsGatewayServer : StandardServer
         {
             if (m_userCertificateValidator != null)
             {
-                m_userCertificateValidator.Validate(certificate);
+                m_userCertificateValidator.ValidateAsync(certificate, CancellationToken.None).GetAwaiter().GetResult();
             }
             else
             {
-                CertificateValidator.Validate(certificate);
+                CertificateValidator.ValidateAsync(certificate, CancellationToken.None).GetAwaiter().GetResult();
             }
         }
         catch (Exception e)
@@ -293,8 +283,6 @@ public partial class ThingsGatewayServer : StandardServer
             // create an exception with a vendor defined sub-code.
             throw new ServiceResultException(new ServiceResult(
                 result,
-                info.Key,
-                LoadServerProperties().ProductUri,
                 new LocalizedText(info)));
         }
     }
