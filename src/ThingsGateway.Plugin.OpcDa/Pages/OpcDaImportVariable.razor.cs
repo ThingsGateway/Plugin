@@ -10,8 +10,6 @@
 
 #pragma warning disable CA2007 // 考虑对等待的任务调用 ConfigureAwait
 using BootstrapBlazor.Components;
-
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 
 using System.Diagnostics.CodeAnalysis;
@@ -332,14 +330,16 @@ public partial class OpcDaImportVariable
 
     [Inject]
     private DownloadService DownloadService { get; set; }
-
+    [Inject]
+    ThingsGateway.Gateway.Razor.IGatewayExportService GatewayExportService { get; set; }
     /// <summary>
     /// 导出到excel
     /// </summary>
     /// <returns></returns>
     public async Task DownChannelExportAsync(Channel data)
     {
-        await App.RootServices.GetRequiredService<ThingsGateway.Gateway.Razor.IGatewayExportService>().OnChannelExport(new List<Channel>() { data });
+
+        await GatewayExportService.OnChannelExport(new List<Channel>() { data });
     }
 
     /// <summary>
@@ -348,7 +348,7 @@ public partial class OpcDaImportVariable
     /// <returns></returns>
     public async Task DownDeviceExportAsync(Device data, string channelName, string plugin)
     {
-        await App.RootServices.GetRequiredService<ThingsGateway.Gateway.Razor.IGatewayExportService>().OnDeviceExport(new List<Device>() { data }, channelName, plugin);
+        await GatewayExportService.OnDeviceExport(new List<Device>() { data }, channelName, plugin);
 
     }
 
@@ -358,7 +358,7 @@ public partial class OpcDaImportVariable
     /// <returns></returns>
     public async Task DownDeviceVariableExportAsync(List<Variable> data, string devName)
     {
-        await App.RootServices.GetRequiredService<ThingsGateway.Gateway.Razor.IGatewayExportService>().OnVariableExport(data, devName);
+        await GatewayExportService.OnVariableExport(data, devName);
     }
 
 #endif
