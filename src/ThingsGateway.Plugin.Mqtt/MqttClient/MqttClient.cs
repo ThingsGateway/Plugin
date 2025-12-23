@@ -41,7 +41,7 @@ public partial class MqttClient : BusinessBaseWithCacheIntervalScriptAll
     public override VariablePropertyBase VariablePropertys => _variablePropertys;
     protected override BusinessPropertyWithCacheIntervalScript _businessPropertyWithCacheIntervalScript => _driverPropertys;
 
-    public override Type DriverPropertyUIType => typeof(MqttPropertyRazor);
+    public override Type DriverPropertyUIType => typeof(MqttBusinessPropertyRazor);
 
     /// <inheritdoc/>
     public override string ToString()

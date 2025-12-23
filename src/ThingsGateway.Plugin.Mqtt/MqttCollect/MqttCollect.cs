@@ -20,6 +20,7 @@ using MQTTnet.Client;
 using ThingsGateway.Foundation;
 
 using TouchSocket.Core;
+using System.Security.Cryptography.X509Certificates;
 
 namespace ThingsGateway.Plugin.Mqtt;
 
@@ -35,6 +36,7 @@ public partial class MqttCollect : CollectBase
     {
         return $" {nameof(MqttClient)} IP:{_driverPropertys.IP} Port:{_driverPropertys.Port}";
     }
+    public override Type DriverPropertyUIType => typeof(MqttCollectPropertyRazor);
 
 
 
@@ -184,6 +186,31 @@ public partial class MqttCollect : CollectBase
         }
     }
 
+    /// <summary>
+    /// 加载 PEM 证书和私钥
+    /// </summary>
+    private static X509Certificate2 LoadCertificate(string certPath, string keyPath)
+    {
+#if NET10_0_OR_GREATER
+        var cert = X509CertificateLoader.LoadCertificateFromFile(certPath);
+#else
+        var cert = new X509Certificate2(certPath);
+#endif
+        using var reader = new StreamReader(keyPath);
+        var pemReader = new Org.BouncyCastle.OpenSsl.PemReader(reader);
+        var keyPair = pemReader.ReadObject() as Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair;
+
+        if (keyPair == null)
+        {
+            throw new Exception("Invalid private key.");
+        }
+
+        var rsaPrivateKey = Org.BouncyCastle.Security.DotNetUtilities.ToRSA(keyPair.Private as Org.BouncyCastle.Crypto.Parameters.RsaPrivateCrtKeyParameters);
+        var certWithKey = cert.CopyWithPrivateKey(rsaPrivateKey);
+
+        return certWithKey;
+    }
+
     protected override async Task InitChannelAsync(IChannel? channel, CancellationToken cancellationToken)
     {
         ETime = TimeSpan.FromSeconds(_driverPropertys.CheckClearTime);
@@ -195,9 +222,38 @@ public partial class MqttCollect : CollectBase
         var mqttClientOptionsBuilder = mqttFactory.CreateClientOptionsBuilder()
            .WithClientId(_driverPropertys.ConnectId)
            .WithCredentials(_driverPropertys.UserName, _driverPropertys.Password)//账密
-           .WithProtocolVersion(_driverPropertys.MqttProtocolVersion)
            .WithCleanSession(true)
+
+           .WithProtocolVersion(_driverPropertys.MqttProtocolVersion)
+
            .WithKeepAlivePeriod(TimeSpan.FromSeconds(120.0));
+
+        if (_driverPropertys.TLS)
+        {
+            if (_driverPropertys.CAFile.IsNullOrEmpty())
+            {
+                throw new Exception("CAFile不能为空");
+            }
+#if NET10_0_OR_GREATER
+            var caCert = X509CertificateLoader.LoadCertificateFromFile(_driverPropertys.CAFile);
+#else
+            var caCert = new X509Certificate2(_driverPropertys.CAFile);
+#endif
+            mqttClientOptionsBuilder = mqttClientOptionsBuilder.WithTlsOptions(a =>
+            {
+                a.WithTrustChain(new X509Certificate2Collection(caCert));
+                if (!_driverPropertys.ClientCertificateFile.IsNullOrEmpty() && !_driverPropertys.ClientKeyFile.IsNullOrEmpty())
+                {
+                    var clientCert = LoadCertificate(_driverPropertys.ClientCertificateFile, _driverPropertys.ClientKeyFile);
+                    a.WithClientCertificates(new X509Certificate2Collection(clientCert));
+                }
+                a.WithSslProtocols(_driverPropertys.SslProtocols);
+                a.WithCertificateValidationHandler((a) => true);
+            }
+            );
+
+        }
+
 #else
 
         var mqttFactory = new MqttFactory();
@@ -221,10 +277,8 @@ public partial class MqttCollect : CollectBase
         _mqttClient.ApplicationMessageReceivedAsync += MqttClient_ApplicationMessageReceivedAsync;
 
         #endregion 初始化
-
         await base.InitChannelAsync(channel, cancellationToken).ConfigureAwait(false);
     }
-
     private TimeSpan ETime = TimeSpan.FromSeconds(60000);
     protected override async Task ProtectedStartAsync(CancellationToken cancellationToken)
     {

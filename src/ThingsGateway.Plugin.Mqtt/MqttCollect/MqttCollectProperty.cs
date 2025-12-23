@@ -8,7 +8,10 @@
 //  QQ群：605534569
 //------------------------------------------------------------------------------
 
+using BootstrapBlazor.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using MQTTnet.Formatter;
+using System.Security.Authentication;
 
 namespace ThingsGateway.Plugin.Mqtt;
 
@@ -37,6 +40,38 @@ public class MqttCollectProperty : CollectPropertyBase
 
     [DynamicProperty]
     public MqttProtocolVersion MqttProtocolVersion { get; set; } = MqttProtocolVersion.V311;
+
+
+
+    [DynamicProperty]
+    public bool TLS { get; set; } = false;
+
+    [DynamicProperty]
+    [AutoGenerateColumn(ComponentType = typeof(MultiSelect<SslProtocols>))]
+#pragma warning disable CA5398 // 避免硬编码的 SslProtocols 值
+    public SslProtocols SslProtocols { get; set; } = SslProtocols.Tls12 | SslProtocols.Tls13;
+#pragma warning restore CA5398 // 避免硬编码的 SslProtocols 值
+
+    [AutoGenerateColumn(Ignore = true)]
+    [DynamicProperty]
+    public string CAFile { get; set; }
+
+    [FileValidation(Extensions = [".txt", ".pem"], FileSize = 1024 * 1024)]
+    internal IBrowserFile CAFile_BrowserFile { get; set; }
+
+    [DynamicProperty]
+    [AutoGenerateColumn(Ignore = true)]
+    public string ClientCertificateFile { get; set; }
+
+    [FileValidation(Extensions = [".txt", ".pem"], FileSize = 1024 * 1024)]
+    internal IBrowserFile ClientCertificateFile_BrowserFile { get; set; }
+
+    [DynamicProperty]
+    [AutoGenerateColumn(Ignore = true)]
+    public string ClientKeyFile { get; set; }
+
+    [FileValidation(Extensions = [".txt", ".pem"], FileSize = 1024 * 1024)]
+    internal IBrowserFile ClientKeyFile_BrowserFile { get; set; }
 
     /// <summary>
     /// 是否websocket连接

@@ -18,7 +18,7 @@ using ThingsGateway.Common;
 
 namespace ThingsGateway.Plugin.Mqtt
 {
-    public partial class MqttPropertyRazor : IPropertyUIBase
+    public partial class MqttBusinessPropertyRazor : IPropertyUIBase
     {
         [Parameter, EditorRequired]
         public string Id { get; set; }
