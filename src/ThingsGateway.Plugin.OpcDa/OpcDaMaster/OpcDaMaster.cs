@@ -158,7 +158,7 @@ public class OpcDaMaster : CollectBase
     /// <inheritdoc/>
     protected override async ValueTask<Dictionary<string, OperResult>> WriteValuesAsync(Dictionary<VariableRuntime, JsonNode> writeInfoLists, CancellationToken cancellationToken)
     {
-        using var writeLock = await ReadWriteLock.WriterLockAsync(cancellationToken).ConfigureAwait(false);
+        using var writeLock = await ReadWriteLock.WriterLockAsync().ConfigureAwait(false);
         var result = _plc.WriteItem(writeInfoLists.ToDictionary(a => a.Key.RegisterAddress!, a => a.Value.GetObjectFromJsonNode()!));
         var results = new NonBlockingDictionary<string, OperResult>(
             result.ToDictionary(a =>

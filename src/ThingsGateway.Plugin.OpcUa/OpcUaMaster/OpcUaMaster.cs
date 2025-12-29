@@ -294,7 +294,7 @@ public class OpcUaMaster : CollectBase
     /// <inheritdoc/>
     protected override async ValueTask<Dictionary<string, OperResult>> WriteValuesAsync(Dictionary<VariableRuntime, JsonNode> writeInfoLists, CancellationToken cancellationToken)
     {
-        using var writeLock = await ReadWriteLock.WriterLockAsync(cancellationToken).ConfigureAwait(false);
+        using var writeLock = await ReadWriteLock.WriterLockAsync().ConfigureAwait(false);
         var result = await _plc.WriteNodeAsync(writeInfoLists.ToDictionary(a => a.Key.RegisterAddress!, a => a.Value), cancellationToken).ConfigureAwait(false);
         var results = new NonBlockingDictionary<string, OperResult>(result.ToDictionary(a => writeInfoLists.Keys.FirstOrDefault(b => b.RegisterAddress == a.Key)?.Name!
         , a =>
