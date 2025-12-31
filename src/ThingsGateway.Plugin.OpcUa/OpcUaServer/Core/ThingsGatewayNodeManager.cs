@@ -223,7 +223,7 @@ public class ThingsGatewayNodeManager : CustomNodeManager2
     /// 更新变量
     /// </summary>
     /// <param name="variable"></param>
-    public void UpVariable(VariableBasicData variable)
+    public void UpVariable(VariableRuntime variable)
     {
         if (!NodeIdTags.TryGetValue($"{variable.DeviceName}.{variable.Name}", out var uaTag))
             return;
@@ -234,13 +234,14 @@ public class ThingsGatewayNodeManager : CustomNodeManager2
             var code = variable.IsOnline ? StatusCodes.Good : StatusCodes.Bad;
             if (code == StatusCodes.Good)
             {
-                ChangeNodeData(uaTag, initialItemValue, variable.ChangeTime);
+                ChangeNodeData(uaTag, initialItemValue, variable.CollectTime);
             }
 
             if (uaTag.StatusCode != code)
             {
                 uaTag.StatusCode = code;
             }
+            uaTag.SetStatusCode(SystemContext, code, variable.CollectTime);
             uaTag.UpdateChangeMasks(NodeStateChangeMasks.Value);
             uaTag.ClearChangeMasks(SystemContext, false);
         }

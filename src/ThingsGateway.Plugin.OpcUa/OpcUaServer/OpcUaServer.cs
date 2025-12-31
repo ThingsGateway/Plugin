@@ -15,9 +15,7 @@ using Opc.Ua;
 using Opc.Ua.Bindings;
 using Opc.Ua.Configuration;
 
-using System.Collections.Concurrent;
 using ThingsGateway.Foundation.Common;
-using ThingsGateway.Foundation.Common.DictionaryExtensions;
 using ThingsGateway.Foundation.Common.Extension;
 using ThingsGateway.Foundation.Common.LinqExtension;
 using ThingsGateway.Foundation.Common.PooledAwait;
@@ -47,7 +45,7 @@ public partial class OpcUaServer : BusinessBase
 #if !Management
     private ThingsGatewayServer m_server;
     protected IStringLocalizer Localizer { get; private set; }
-    private NonBlockingDictionary<long, VariableBasicData> CollectVariableRuntimes { get; set; } = new();
+    //private NonBlockingDictionary<long, VariableBasicData> CollectVariableRuntimes { get; set; } = new();
 
     private static readonly string[] separator = new string[] { ";" };
 
@@ -80,7 +78,7 @@ public partial class OpcUaServer : BusinessBase
             await base.AfterVariablesChangedAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        CollectVariableRuntimes.Clear();
+        //CollectVariableRuntimes.Clear();
 
         //IdVariableRuntimes.ForEach(a =>
         //{
@@ -97,7 +95,7 @@ public partial class OpcUaServer : BusinessBase
     {
         await UaInit().ConfigureAwait(false);
 
-        GlobalData.VariableValueChangeEvent += VariableValueChange;
+        //GlobalData.VariableCollectChangeEvent += VariableCollectChange;
 
         Localizer = App.CreateLocalizerByType(typeof(OpcUaServer))!;
 
@@ -175,9 +173,9 @@ public partial class OpcUaServer : BusinessBase
     /// <inheritdoc/>
     protected override async Task DisposeAsync(bool disposing)
     {
-        GlobalData.VariableValueChangeEvent -= VariableValueChange;
+        //GlobalData.VariableCollectChangeEvent -= VariableCollectChange;
         await UaDisposeAsync().ConfigureAwait(false);
-        CollectVariableRuntimes?.Clear();
+        //CollectVariableRuntimes?.Clear();
         IdVariableRuntimes?.Clear();
         await base.DisposeAsync(disposing).ConfigureAwait(false);
     }
@@ -188,7 +186,7 @@ public partial class OpcUaServer : BusinessBase
         await m_application.CheckApplicationInstanceCertificatesAsync(true, 1200, cancellationToken).ConfigureAwait(false);
 
         await m_application.StartAsync(m_server).ConfigureAwait(false);
-        IdVariableRuntimes.ForEach(a => VariableValueChange(a.Value, a.Value.AdaptVariableBasicData()));
+        //IdVariableRuntimes.ForEach(a => VariableCollectChange(a.Value));
         await base.ProtectedStartAsync(cancellationToken).ConfigureAwait(false);
     }
 
@@ -209,7 +207,7 @@ public partial class OpcUaServer : BusinessBase
                         await @this.m_application.StartAsync(@this.m_server).ConfigureAwait(false);
                         @this.connect_success = true;
                         await Task.Delay(2000, cancellationToken).ConfigureAwait(false);
-                        @this.IdVariableRuntimes.ForEach(a => @this.VariableValueChange(a.Value, a.Value.AdaptVariableBasicData()));
+                        //@this.IdVariableRuntimes.ForEach(a => @this.VariableCollectChange(a.Value));
                     }
                     catch (Exception ex)
                     {
@@ -219,14 +217,18 @@ public partial class OpcUaServer : BusinessBase
                         await Task.Delay(10000, cancellationToken).ConfigureAwait(false);
                     }
                 }
-                var varList = @this.CollectVariableRuntimes.ToListWithDequeue();
+                if (!@this.IsConnected())
+                {
+                    return;
+                }
+                var varList = @this.IdVariableRuntimes;
                 foreach (var item in varList)
                 {
                     try
                     {
                         if (!cancellationToken.IsCancellationRequested)
                         {
-                            @this.m_server?.NodeManager?.UpVariable(item);
+                            @this.m_server?.NodeManager?.UpVariable(item.Value);
                         }
                         else
                         {
@@ -434,31 +436,31 @@ public partial class OpcUaServer : BusinessBase
 
         return config;
     }
-    private void VariableValueChange(VariableRuntime variableRuntime, VariableBasicData variableData)
-    {
-        //if (CurrentDevice.Pause)
-        //    return;
-        if (TaskSchedulerLoop?.Stoped == true) return;
-        if (DisposedValue) return;
-        if (IdVariableRuntimes.ContainsKey(variableData.Id))
-            CollectVariableRuntimes.AddOrUpdate(variableData.Id, variableData, (a, b) => variableData);
-    }
-    /// <summary>
-    /// 暂停
-    /// </summary>
-    /// <param name="pause">暂停</param>
-    public override void PauseThread(bool pause)
-    {
-        lock (pauseLock)
-        {
-            var oldV = CurrentDevice.Pause;
-            base.PauseThread(pause);
-            if (!pause && oldV != pause)
-            {
-                IdVariableRuntimes.ForEach(a => VariableValueChange(a.Value, a.Value.AdaptVariableBasicData()));
-            }
-        }
-    }
+    //private void VariableValueChange(VariableRuntime variableRuntime, VariableBasicData variableData)
+    //{
+    //    //if (CurrentDevice.Pause)
+    //    //    return;
+    //    if (TaskSchedulerLoop?.Stoped == true) return;
+    //    if (DisposedValue) return;
+    //    if (IdVariableRuntimes.ContainsKey(variableData.Id))
+    //        CollectVariableRuntimes.AddOrUpdate(variableData.Id, variableData, (a, b) => variableData);
+    //}
+    ///// <summary>
+    ///// 暂停
+    ///// </summary>
+    ///// <param name="pause">暂停</param>
+    //public override void PauseThread(bool pause)
+    //{
+    //    lock (pauseLock)
+    //    {
+    //        var oldV = CurrentDevice.Pause;
+    //        base.PauseThread(pause);
+    //        if (!pause && oldV != pause)
+    //        {
+    //            //IdVariableRuntimes.ForEach(a => VariableValueChange(a.Value, a.Value.AdaptVariableBasicData()));
+    //        }
+    //    }
+    //}
 
 #endif
 }
