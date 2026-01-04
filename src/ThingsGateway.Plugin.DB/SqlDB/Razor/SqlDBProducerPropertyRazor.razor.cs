@@ -55,7 +55,7 @@ namespace ThingsGateway.Debug
         {
             string script = null;
             {
-                script = pname == businessProperty.BigTextScriptHistoryTable ? businessProperty.BigTextScriptHistoryTable : businessProperty.BigTextScriptRealTable;
+                script = pname == nameof(businessProperty.BigTextScriptHistoryTable) ? businessProperty.BigTextScriptHistoryTable : businessProperty.BigTextScriptRealTable;
             }
 
             var op = new DialogOption()
@@ -108,14 +108,14 @@ namespace ThingsGateway.Debug
                             var sql = $"""
                                             1
                                             """;
-                            await db.Ado.ExecuteCommandAsync(sql, default, cancellationToken: cancellationToken).ConfigureAwait(false);
+                            await db.Ado.ExecuteCommandAsync(sql, default).ConfigureAwait(false);
                         }
                         public override async Task DBInsertable(ISqlOrmClient db, IEnumerable<object> datas, CancellationToken cancellationToken)
                         {
                             var sql = $"""
                                             1
                                             """;
-                            await db.Ado.ExecuteCommandAsync(sql, default, cancellationToken: cancellationToken).ConfigureAwait(false);
+                            await db.Ado.ExecuteCommandAsync(sql, default).ConfigureAwait(false);
                         }
                     }
                     
@@ -142,14 +142,14 @@ namespace ThingsGateway.Debug
                             var sql = $"""
                                             1
                                             """;
-                            await db.Ado.ExecuteCommandAsync(sql, default, cancellationToken: cancellationToken).ConfigureAwait(false);
+                            await db.Ado.ExecuteCommandAsync(sql, default).ConfigureAwait(false);
                         }
                         public override async Task DBInsertable(ISqlOrmClient db, IEnumerable<object> datas, CancellationToken cancellationToken)
                         {
                             var sql = $"""
                                             1
                                             """;
-                            await db.Ado.ExecuteCommandAsync(sql, default, cancellationToken: cancellationToken).ConfigureAwait(false);
+                            await db.Ado.ExecuteCommandAsync(sql, default).ConfigureAwait(false);
                         }
                     }
 
@@ -235,14 +235,14 @@ namespace ThingsGateway.Debug
                             var sql = $"""
                                             111
                                             """;
-                            await db.Ado.ExecuteCommandAsync(sql, default, cancellationToken: cancellationToken).ConfigureAwait(false);
+                            await db.Ado.ExecuteCommandAsync(sql, default).ConfigureAwait(false);
                         }
                         public override async Task DBInsertable(ISqlOrmClient db, IEnumerable<object> datas, CancellationToken cancellationToken)
                         {
                             var sql = $"""
                                             111
                                             """;
-                            await db.Ado.ExecuteCommandAsync(sql, default, cancellationToken: cancellationToken).ConfigureAwait(false);
+                            await db.Ado.ExecuteCommandAsync(sql, default).ConfigureAwait(false);
                         }
                     }
                     
@@ -269,14 +269,14 @@ namespace ThingsGateway.Debug
                             var sql = $"""
                                             111
                                             """;
-                            await db.Ado.ExecuteCommandAsync(sql, default, cancellationToken: cancellationToken).ConfigureAwait(false);
+                            await db.Ado.ExecuteCommandAsync(sql, default).ConfigureAwait(false);
                         }
                         public override async Task DBInsertable(ISqlOrmClient db, IEnumerable<object> datas, CancellationToken cancellationToken)
                         {
                             var sql = $"""
                                             111
                                             """;
-                            await db.Ado.ExecuteCommandAsync(sql, default, cancellationToken: cancellationToken).ConfigureAwait(false);
+                            await db.Ado.ExecuteCommandAsync(sql, default).ConfigureAwait(false);
                         }
                     }
 
