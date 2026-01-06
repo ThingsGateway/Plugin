@@ -51,7 +51,7 @@ public partial class MqttServer : BusinessBaseWithCacheIntervalScriptAll
         #region 初始化
 
         var configuration = new ConfigurationBuilder()
-         .SetBasePath(PluginDirectory)
+         .SetBasePath(Path.GetFullPath(PluginDirectory))
          .Build();
 #if NET10_0_OR_GREATER
         var webBuilder =
