@@ -322,10 +322,10 @@ public class OpcUaMaster : CollectBase
         {
             if (_plc != null)
                 await _plc.DisconnectAsync().ConfigureAwait(false);
-            await base.AfterVariablesChangedAsync(cancellationToken).ConfigureAwait(false);
         }
         finally
         {
+            await base.AfterVariablesChangedAsync(cancellationToken).ConfigureAwait(false);
             VariableAddresDicts = IdVariableRuntimes.Select(a => a.Value).Where(it => !it.RegisterAddress.IsNullOrEmpty()).GroupBy(a => a.RegisterAddress).ToDictionary(a => a.Key!, b => b.ToList());
             try
             {

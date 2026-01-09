@@ -81,7 +81,7 @@ public partial class MqttCollect : CollectBase
                 {
                     try
                     {
-                        if (item.Item2.GetExpressionsResult(json).ToBoolean(true))
+                        if (item.Item2.GetExpressionsResult(json, LogMessage).ToBoolean(true))
                         {
                             var jtoken = json.SelectToken(item.Item1);
                             object value;
