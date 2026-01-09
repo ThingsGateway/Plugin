@@ -48,7 +48,7 @@ public partial class QuestDBPage : IDriverUIBase
         }
         else
         {
-            QuestDBProducer QuestDBProducer = GlobalData.ReadOnlyIdDevices.TryGetValue(DeviceId, out DeviceRuntime deviceRuntime) ? deviceRuntime.Driver as QuestDBProducer : null;
+            QuestDBProducer QuestDBProducer = GlobalData.TryGetDeviceRuntime(DeviceId, out DeviceRuntime deviceRuntime) ? deviceRuntime.Driver as QuestDBProducer : null;
             if (QuestDBProducer == null) throw new Exception("Driver not found");
             var query = await QuestDBProducer.QueryData(options).ConfigureAwait(false);
             return query;

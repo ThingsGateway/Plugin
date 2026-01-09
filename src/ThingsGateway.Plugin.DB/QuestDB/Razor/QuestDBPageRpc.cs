@@ -29,7 +29,7 @@ public partial class QuestDBPageRpc : SingletonRpcServer, IPluginRpcServer, IQue
     [DmtpRpc]
     public async Task<QueryData<QuestDBNumberHistoryValue>> OnQuestDBQueryAsync(long deviceId, QueryPageOptions options)
     {
-        QuestDBProducer QuestDBProducer = GlobalData.ReadOnlyIdDevices.TryGetValue(deviceId, out DeviceRuntime deviceRuntime) ? deviceRuntime.Driver as QuestDBProducer : null;
+        QuestDBProducer QuestDBProducer = GlobalData.TryGetDeviceRuntime(deviceId, out DeviceRuntime deviceRuntime) ? deviceRuntime.Driver as QuestDBProducer : null;
         if (QuestDBProducer == null) throw new Exception("Driver not found");
         var query = await QuestDBProducer.QueryData(options).ConfigureAwait(false);
         return query;

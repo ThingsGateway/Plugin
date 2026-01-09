@@ -29,7 +29,7 @@ public partial class TDengineDBPageRpc : SingletonRpcServer, IPluginRpcServer, I
     [DmtpRpc]
     public async Task<QueryData<TDengineDBNumberHistoryValue>> OnTDengineDBQueryAsync(long deviceId, QueryPageOptions options)
     {
-        TDengineDBProducer TDengineDBProducer = GlobalData.ReadOnlyIdDevices.TryGetValue(deviceId, out DeviceRuntime deviceRuntime) ? deviceRuntime.Driver as TDengineDBProducer : null;
+        TDengineDBProducer TDengineDBProducer = GlobalData.TryGetDeviceRuntime(deviceId, out DeviceRuntime deviceRuntime) ? deviceRuntime.Driver as TDengineDBProducer : null;
         if (TDengineDBProducer == null) throw new Exception("Driver not found");
         var query = await TDengineDBProducer.QueryData(options).ConfigureAwait(false);
         return query;

@@ -27,7 +27,7 @@ public partial class HistoryAlarmPageRpc : SingletonRpcServer, IPluginRpcServer,
     [DmtpRpc]
     public async Task<QueryData<HistoryAlarm>> OnHistoryAlarmQueryAsync(long deviceId, QueryPageOptions options)
     {
-        SqlHistoryAlarm SqlHistoryAlarmProducer = GlobalData.ReadOnlyIdDevices.TryGetValue(deviceId, out DeviceRuntime deviceRuntime) ? deviceRuntime.Driver as SqlHistoryAlarm : null;
+        SqlHistoryAlarm SqlHistoryAlarmProducer = GlobalData.TryGetDeviceRuntime(deviceId, out DeviceRuntime deviceRuntime) ? deviceRuntime.Driver as SqlHistoryAlarm : null;
         if (SqlHistoryAlarmProducer == null) throw new Exception("Driver not found");
         var query = await SqlHistoryAlarmProducer.QueryData(options).ConfigureAwait(false);
         return query;

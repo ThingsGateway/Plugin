@@ -315,7 +315,7 @@ public partial class MqttClient : BusinessBaseWithCacheIntervalScriptAll
             {
                 foreach (var rpcData in rpcDatas)
                 {
-                    if (GlobalData.ReadOnlyDevices.TryGetValue(rpcData.Key, out var device))
+                    if (GlobalData.TryGetDeviceRuntime(rpcData.Key, out var device))
                     {
                         foreach (var item in rpcData.Value)
                         {

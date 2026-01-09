@@ -51,7 +51,7 @@ public partial class TDengineDBPage : IDriverUIBase
         }
         else
         {
-            TDengineDBProducer TDengineDBProducer = GlobalData.ReadOnlyIdDevices.TryGetValue(DeviceId, out DeviceRuntime deviceRuntime) ? deviceRuntime.Driver as TDengineDBProducer : null;
+            TDengineDBProducer TDengineDBProducer = GlobalData.TryGetDeviceRuntime(DeviceId, out DeviceRuntime deviceRuntime) ? deviceRuntime.Driver as TDengineDBProducer : null;
             if (TDengineDBProducer == null) throw new Exception("Driver not found");
             var query = await TDengineDBProducer.QueryData(options).ConfigureAwait(false);
             return query;

@@ -57,7 +57,7 @@ public partial class HistoryAlarmPage : IDriverUIBase
         }
         else
         {
-            SqlHistoryAlarm SqlHistoryAlarmProducer = GlobalData.ReadOnlyIdDevices.TryGetValue(DeviceId, out DeviceRuntime deviceRuntime) ? deviceRuntime.Driver as SqlHistoryAlarm : null;
+            SqlHistoryAlarm SqlHistoryAlarmProducer = GlobalData.TryGetDeviceRuntime(DeviceId, out DeviceRuntime deviceRuntime) ? deviceRuntime.Driver as SqlHistoryAlarm : null;
             if (SqlHistoryAlarmProducer == null) throw new Exception("Driver not found");
             var query = await SqlHistoryAlarmProducer.QueryData(options).ConfigureAwait(false);
             return query;

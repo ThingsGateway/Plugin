@@ -51,7 +51,7 @@ public partial class SqlDBPage : IDriverUIBase
         }
         else
         {
-            SqlDBProducer SqlDBProducer = GlobalData.ReadOnlyIdDevices.TryGetValue(DeviceId, out DeviceRuntime deviceRuntime) ? deviceRuntime.Driver as SqlDBProducer : null;
+            SqlDBProducer SqlDBProducer = GlobalData.TryGetDeviceRuntime(DeviceId, out DeviceRuntime deviceRuntime) ? deviceRuntime.Driver as SqlDBProducer : null;
             if (SqlDBProducer == null) throw new Exception("Driver not found");
             var query = await SqlDBProducer.QueryHistoryData(options).ConfigureAwait(false);
             return query;
@@ -67,7 +67,7 @@ public partial class SqlDBPage : IDriverUIBase
         }
         else
         {
-            SqlDBProducer SqlDBProducer = GlobalData.ReadOnlyIdDevices.TryGetValue(DeviceId, out DeviceRuntime deviceRuntime) ? deviceRuntime.Driver as SqlDBProducer : null;
+            SqlDBProducer SqlDBProducer = GlobalData.TryGetDeviceRuntime(DeviceId, out DeviceRuntime deviceRuntime) ? deviceRuntime.Driver as SqlDBProducer : null;
             if (SqlDBProducer == null) throw new Exception("Driver not found");
             var query = await SqlDBProducer.QueryRealData(options).ConfigureAwait(false);
             return query;

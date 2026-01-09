@@ -32,7 +32,7 @@ public partial class SqlDBPageRpc : SingletonRpcServer, IPluginRpcServer, ISqlDB
     public async Task<QueryData<SQLNumberHistoryValue>> OnSqlDBQueryHistoryAsync(long deviceId, QueryPageOptions options)
     {
 
-        SqlDBProducer SqlDBProducer = GlobalData.ReadOnlyIdDevices.TryGetValue(deviceId, out DeviceRuntime deviceRuntime) ? deviceRuntime.Driver as SqlDBProducer : null;
+        SqlDBProducer SqlDBProducer = GlobalData.TryGetDeviceRuntime(deviceId, out DeviceRuntime deviceRuntime) ? deviceRuntime.Driver as SqlDBProducer : null;
         if (SqlDBProducer == null) throw new Exception("Driver not found");
         var query = await SqlDBProducer.QueryHistoryData(options).ConfigureAwait(false);
         return query;
@@ -41,7 +41,7 @@ public partial class SqlDBPageRpc : SingletonRpcServer, IPluginRpcServer, ISqlDB
     [DmtpRpc]
     public async Task<QueryData<SQLRealValue>> OnSqlDBQueryRealAsync(long deviceId, QueryPageOptions options)
     {
-        SqlDBProducer SqlDBProducer = GlobalData.ReadOnlyIdDevices.TryGetValue(deviceId, out DeviceRuntime deviceRuntime) ? deviceRuntime.Driver as SqlDBProducer : null;
+        SqlDBProducer SqlDBProducer = GlobalData.TryGetDeviceRuntime(deviceId, out DeviceRuntime deviceRuntime) ? deviceRuntime.Driver as SqlDBProducer : null;
         if (SqlDBProducer == null) throw new Exception("Driver not found");
         var query = await SqlDBProducer.QueryRealData(options).ConfigureAwait(false);
         return query;
