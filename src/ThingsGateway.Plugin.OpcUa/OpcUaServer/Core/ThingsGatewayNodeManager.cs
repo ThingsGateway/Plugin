@@ -380,125 +380,27 @@ public class ThingsGatewayNodeManager : CustomNodeManager2
     /// </summary>
     private FolderState CreateFolder(NodeState parent, DeviceRuntime deviceRuntime)
     {
-        if (deviceRuntime != null)
+
+        var name = deviceRuntime.Name;
+        var description = deviceRuntime.Description;
+        FolderState folder = new(parent)
         {
-            var name = deviceRuntime.Name;
-            var description = deviceRuntime.Description;
-            FolderState folder = new(parent)
-            {
-                SymbolicName = name,
-                ReferenceTypeId = ReferenceTypes.Organizes,
-                TypeDefinitionId = ObjectTypeIds.FolderType,
-                Description = description,
-                NodeId = new NodeId(name, NamespaceIndex),
-                BrowseName = new QualifiedName(name, NamespaceIndex),
-                DisplayName = new LocalizedText(name),
-                WriteMask = AttributeWriteMask.None,
-                UserWriteMask = AttributeWriteMask.None,
-                EventNotifier = EventNotifiers.None
-            };
-
-            // 添加自定义属性
-            //{
-            //    var property = new PropertyState<string>(folder)
-            //    {
-            //        NodeId = new NodeId($"{deviceRuntime.Name}.PluginName", NamespaceIndex),
-            //        BrowseName = new QualifiedName("PluginName", NamespaceIndex),
-            //        DisplayName = "PluginName",
-            //        DataType = DataTypeIds.String,
-            //        ValueRank = ValueRanks.Scalar,
-            //        Value = deviceRuntime.PluginName ?? string.Empty
-            //    };
-            //    AddProperty(folder, property);
-            //}
-            //{
-            //    var property = new PropertyState<string>(folder)
-            //    {
-            //        NodeId = new NodeId($"{deviceRuntime.Name}.Remark1", NamespaceIndex),
-            //        BrowseName = new QualifiedName("Remark1", NamespaceIndex),
-            //        DisplayName = "Remark1",
-            //        DataType = DataTypeIds.String,
-            //        ValueRank = ValueRanks.Scalar,
-            //        Value = deviceRuntime.Remark1 ?? string.Empty
-            //    };
-            //    AddProperty(folder, property);
-            //}
-            //{
-            //    var property = new PropertyState<string>(folder)
-            //    {
-            //        NodeId = new NodeId($"{deviceRuntime.Name}.Remark2", NamespaceIndex),
-            //        BrowseName = new QualifiedName("Remark2", NamespaceIndex),
-            //        DisplayName = "Remark2",
-            //        DataType = DataTypeIds.String,
-            //        ValueRank = ValueRanks.Scalar,
-            //        Value = deviceRuntime.Remark2 ?? string.Empty
-            //    };
-            //    AddProperty(folder, property);
-            //}
-            //{
-            //    var property = new PropertyState<string>(folder)
-            //    {
-            //        NodeId = new NodeId($"{deviceRuntime.Name}.Remark3", NamespaceIndex),
-            //        BrowseName = new QualifiedName("Remark3", NamespaceIndex),
-            //        DisplayName = "Remark3",
-            //        DataType = DataTypeIds.String,
-            //        ValueRank = ValueRanks.Scalar,
-            //        Value = deviceRuntime.Remark3 ?? string.Empty
-            //    };
-            //    AddProperty(folder, property);
-            //}
-            //{
-            //    var property = new PropertyState<string>(folder)
-            //    {
-            //        NodeId = new NodeId($"{deviceRuntime.Name}.Remark4", NamespaceIndex),
-            //        BrowseName = new QualifiedName("Remark4", NamespaceIndex),
-            //        DisplayName = "Remark4",
-            //        DataType = DataTypeIds.String,
-            //        ValueRank = ValueRanks.Scalar,
-            //        Value = deviceRuntime.Remark4 ?? string.Empty
-            //    };
-            //    AddProperty(folder, property);
-            //}
-            //{
-            //    var property = new PropertyState<string>(folder)
-            //    {
-            //        NodeId = new NodeId($"{deviceRuntime.Name}.Remark5", NamespaceIndex),
-            //        BrowseName = new QualifiedName("Remark5", NamespaceIndex),
-            //        DisplayName = "Remark5",
-            //        DataType = DataTypeIds.String,
-            //        ValueRank = ValueRanks.Scalar,
-            //        Value = deviceRuntime.Remark5 ?? string.Empty
-            //    };
-            //    AddProperty(folder, property);
-            //}
-
-            parent?.AddChild(folder);
-
-            return folder;
-        }
-        else
-        {
-            var name = "Memory";
-            var description = "Memory";
-            FolderState folder = new(parent)
-            {
-                SymbolicName = name,
-                ReferenceTypeId = ReferenceTypes.Organizes,
-                TypeDefinitionId = ObjectTypeIds.FolderType,
-                Description = description,
-                NodeId = new NodeId(name, NamespaceIndex),
-                BrowseName = new QualifiedName(name, NamespaceIndex),
-                DisplayName = new LocalizedText(name),
-                WriteMask = AttributeWriteMask.None,
-                UserWriteMask = AttributeWriteMask.None,
-                EventNotifier = EventNotifiers.None
-            };
+            SymbolicName = name,
+            ReferenceTypeId = ReferenceTypes.Organizes,
+            TypeDefinitionId = ObjectTypeIds.FolderType,
+            Description = description,
+            NodeId = new NodeId(name, NamespaceIndex),
+            BrowseName = new QualifiedName(name, NamespaceIndex),
+            DisplayName = new LocalizedText(name),
+            WriteMask = AttributeWriteMask.None,
+            UserWriteMask = AttributeWriteMask.None,
+            EventNotifier = EventNotifiers.None
+        };
 
 
-            parent?.AddChild(folder);
+        parent?.AddChild(folder);
 
-            return folder;
-        }
+        return folder;
     }
 
     /// <summary>
