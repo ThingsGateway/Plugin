@@ -211,7 +211,7 @@ public partial class MqttCollect : CollectBase
         return certWithKey;
     }
 
-    protected override async Task InitChannelAsync(IChannel? channel, CancellationToken cancellationToken)
+    protected override async Task InitChannelAsync(ChannelObject channelObject, CancellationToken cancellationToken)
     {
         ETime = TimeSpan.FromSeconds(_driverPropertys.CheckClearTime);
 
@@ -277,7 +277,7 @@ public partial class MqttCollect : CollectBase
         _mqttClient.ApplicationMessageReceivedAsync += MqttClient_ApplicationMessageReceivedAsync;
 
         #endregion 初始化
-        await base.InitChannelAsync(channel, cancellationToken).ConfigureAwait(false);
+        await base.InitChannelAsync(channelObject, cancellationToken).ConfigureAwait(false);
     }
     private TimeSpan ETime = TimeSpan.FromSeconds(60000);
     protected override async Task ProtectedStartAsync(CancellationToken cancellationToken)

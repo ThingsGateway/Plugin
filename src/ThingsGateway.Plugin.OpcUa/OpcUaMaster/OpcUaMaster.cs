@@ -57,7 +57,7 @@ public class OpcUaMaster : CollectBase
 
     public override Type DriverUIType => typeof(OpcUaMasterRuntimeRazor);
 
-    protected override async Task InitChannelAsync(IChannel? channel, CancellationToken cancellationToken)
+    protected override async Task InitChannelAsync(ChannelObject channelObject, CancellationToken cancellationToken)
     {
         //载入配置
         OpcUaProperty config = new()
@@ -88,7 +88,7 @@ public class OpcUaMaster : CollectBase
         _plc.LogEvent += _plc_LogEvent;
         _plc.JsonNodeDataChangedEventHandler += JsonNodeDataChangedEventHandler;
         _plc.OpcUaProperty = config;
-        await base.InitChannelAsync(channel, cancellationToken).ConfigureAwait(false);
+        await base.InitChannelAsync(channelObject, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc/>

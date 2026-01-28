@@ -184,7 +184,7 @@ public partial class SqlDBProducer : BusinessBaseWithCacheIntervalVariable
 
 
 
-    protected override async Task InitChannelAsync(IChannel? channel, CancellationToken cancellationToken)
+    protected override async Task InitChannelAsync(ChannelObject channelObject, CancellationToken cancellationToken)
     {
         _db = SqlDBBusinessDatabaseUtil.GetDb(_driverPropertys);
 
@@ -193,7 +193,7 @@ public partial class SqlDBProducer : BusinessBaseWithCacheIntervalVariable
             GlobalData.VariableValueChangeEvent += VariableValueChange;
         }
 
-        await base.InitChannelAsync(channel, cancellationToken).ConfigureAwait(false);
+        await base.InitChannelAsync(channelObject, cancellationToken).ConfigureAwait(false);
     }
 
     public override Task AfterVariablesChangedAsync(CancellationToken cancellationToken)

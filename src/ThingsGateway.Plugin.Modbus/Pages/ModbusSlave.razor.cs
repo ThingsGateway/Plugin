@@ -60,9 +60,9 @@ public partial class ModbusSlave : ComponentBase, IDisposable
     }
     [Inject]
     DialogService DialogService { get; set; }
-    private void OnConfimClick((IChannel channel, string logPath) value)
+    private void OnConfimClick((ChannelObject channelObject, string logPath) value)
     {
-        _plc.InitChannel(value.channel);
+        _plc.InitChannel(value.channelObject);
         LogPath = value.logPath;
     }
 }

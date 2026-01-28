@@ -46,7 +46,7 @@ public partial class MqttServer : BusinessBaseWithCacheIntervalScriptAll
 
 #if !Management
 
-    protected override async Task InitChannelAsync(IChannel? channel, CancellationToken cancellationToken)
+    protected override async Task InitChannelAsync(ChannelObject channelObject, CancellationToken cancellationToken)
     {
         #region 初始化
 
@@ -86,7 +86,7 @@ public partial class MqttServer : BusinessBaseWithCacheIntervalScriptAll
 #endif
 
         #endregion 初始化
-        await base.InitChannelAsync(channel, cancellationToken).ConfigureAwait(false);
+        await base.InitChannelAsync(channelObject, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc/>

@@ -82,11 +82,11 @@ public partial class TDengineDBProducer : BusinessBaseWithCacheIntervalVariable
 
 #if !Management
 
-    protected override async Task InitChannelAsync(IChannel? channel, CancellationToken cancellationToken)
+    protected override async Task InitChannelAsync(ChannelObject channelObject, CancellationToken cancellationToken)
     {
         _db = TDengineDBUtil.GetDb(_driverPropertys.DbType, _driverPropertys.BigTextConnectStr, _driverPropertys.NumberTableNameLow);
 
-        await base.InitChannelAsync(channel, cancellationToken).ConfigureAwait(false);
+        await base.InitChannelAsync(channelObject, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc/>

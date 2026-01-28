@@ -53,7 +53,7 @@ public class OpcDaMaster : CollectBase
     public override Type DriverDebugUIType => typeof(ThingsGateway.Debug.OpcDaMaster);
 
     /// <inheritdoc/>
-    protected override async Task InitChannelAsync(IChannel? channel, CancellationToken cancellationToken)
+    protected override async Task InitChannelAsync(ChannelObject channelObject, CancellationToken cancellationToken)
     {
         //载入配置
         OpcDaProperty opcNode = new()
@@ -79,7 +79,7 @@ public class OpcDaMaster : CollectBase
         _plc.DataChangedHandler += DataChangedHandler;
         _plc.LogEvent = Log;
         _plc.Init(opcNode);
-        await base.InitChannelAsync(channel, cancellationToken).ConfigureAwait(false);
+        await base.InitChannelAsync(channelObject, cancellationToken).ConfigureAwait(false);
     }
 
     private void Log(byte level, object sender, string message, Exception ex)

@@ -49,7 +49,7 @@ public class ModbusMaster : CollectFoundationBase
         }
     }
     /// <inheritdoc/>
-    protected override async Task InitChannelAsync(IChannel? channel, CancellationToken cancellationToken)
+    protected override async Task InitChannelAsync(ChannelObject channelObject, CancellationToken cancellationToken)
     {
         //List<VariableRuntime> variableRuntimes = new();
         //variableRuntimes.Add(new VariableRuntime()
@@ -63,7 +63,7 @@ public class ModbusMaster : CollectFoundationBase
 
         //await GlobalData.VariableRuntimeService.AddDynamicVariable(variableRuntimes).ConfigureAwait(false);
 
-        ArgumentNullException.ThrowIfNull(channel);
+        ArgumentNullException.ThrowIfNull(channelObject.Channel);
         var plc = _plc;
         _plc = new();
         if (plc != null)
@@ -76,8 +76,8 @@ public class ModbusMaster : CollectFoundationBase
         _plc.Station = _driverPropertys.Station;
         _plc.Timeout = _driverPropertys.Timeout;
         _plc.ModbusType = _driverPropertys.ModbusType;
-        _plc.InitChannel(channel, LogMessage);
-        await base.InitChannelAsync(channel, cancellationToken).ConfigureAwait(false);
+        _plc.InitChannel(channelObject, LogMessage);
+        await base.InitChannelAsync(channelObject, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc/>

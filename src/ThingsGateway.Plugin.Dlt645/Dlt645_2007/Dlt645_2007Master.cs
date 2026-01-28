@@ -48,9 +48,9 @@ public class Dlt645_2007Master : CollectFoundationBase
         }
     }
 
-    protected override async Task InitChannelAsync(IChannel? channel, CancellationToken cancellationToken)
+    protected override async Task InitChannelAsync(ChannelObject channelObject, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(channel);
+        ArgumentNullException.ThrowIfNull(channelObject.Channel);
 
         var plc = _plc;
         _plc = new();
@@ -65,9 +65,9 @@ public class Dlt645_2007Master : CollectFoundationBase
         _plc.OperCode = _driverPropertys.OperCode;
         _plc.Password = _driverPropertys.Password;
         _plc.Station = _driverPropertys.Station;
-        _plc.InitChannel(channel, LogMessage);
+        _plc.InitChannel(channelObject, LogMessage);
 
-        await base.InitChannelAsync(channel, cancellationToken).ConfigureAwait(false);
+        await base.InitChannelAsync(channelObject, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc/>

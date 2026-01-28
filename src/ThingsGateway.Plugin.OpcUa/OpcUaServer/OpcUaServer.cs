@@ -93,7 +93,7 @@ public partial class OpcUaServer : BusinessBase
             await m_server.StopAsync(CancellationToken.None).ConfigureAwait(false);
     }
 
-    protected override async Task InitChannelAsync(IChannel? channel, CancellationToken cancellationToken)
+    protected override async Task InitChannelAsync(ChannelObject channelObject, CancellationToken cancellationToken)
     {
         await UaInit().ConfigureAwait(false);
 
@@ -101,7 +101,7 @@ public partial class OpcUaServer : BusinessBase
 
         Localizer = App.CreateLocalizerByType(typeof(OpcUaServer))!;
 
-        await base.InitChannelAsync(channel, cancellationToken).ConfigureAwait(false);
+        await base.InitChannelAsync(channelObject, cancellationToken).ConfigureAwait(false);
     }
     internal OpcUaTelemetryContext DefaultTelemetryContext;
     private async Task UaInit()

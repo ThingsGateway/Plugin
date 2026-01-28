@@ -124,12 +124,12 @@ public partial class SqlHistoryAlarm : BusinessBaseWithCacheAlarm
     }
 
 
-    protected override async Task InitChannelAsync(IChannel? channel, CancellationToken cancellationToken)
+    protected override async Task InitChannelAsync(ChannelObject channelObject, CancellationToken cancellationToken)
     {
 
         _db = BusinessDatabaseUtil.GetDb((DatabaseType)_driverPropertys.DbType, _driverPropertys.BigTextConnectStr);
 
-        await base.InitChannelAsync(channel, cancellationToken).ConfigureAwait(false);
+        await base.InitChannelAsync(channelObject, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>

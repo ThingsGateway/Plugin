@@ -39,9 +39,9 @@ public partial class Dlt645_2007Master : ComponentBase, IDisposable
         GC.SuppressFinalize(this);
     }
 
-    private void OnConfimClick((IChannel channel, string logPath) value)
+    private void OnConfimClick((ChannelObject channelObject, string logPath) value)
     {
-        _plc.InitChannel(value.channel);
+        _plc.InitChannel(value.channelObject);
         LogPath = value.logPath;
     }
 

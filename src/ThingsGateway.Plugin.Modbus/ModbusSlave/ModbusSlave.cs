@@ -66,9 +66,9 @@ public class ModbusSlave : BusinessReceivedFoundationBase
     }
 
     /// <inheritdoc/>
-    protected override async Task InitChannelAsync(IChannel? channel, CancellationToken cancellationToken)
+    protected override async Task InitChannelAsync(ChannelObject channelObject, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(channel);
+        ArgumentNullException.ThrowIfNull(channelObject.Channel);
         var plc = _plc;
         _plc = new();
         if (plc != null)
@@ -81,15 +81,15 @@ public class ModbusSlave : BusinessReceivedFoundationBase
         _plc.MulStation = _driverPropertys.MulStation;
         _plc.ModbusType = _driverPropertys.ModbusType;
         _plc.SendDelayTime = _driverPropertys.SendDelayTime;
-        _plc.InitChannel(channel, LogMessage);
-        await base.InitChannelAsync(channel, cancellationToken).ConfigureAwait(false);
+        _plc.InitChannel(channelObject, LogMessage);
+        await base.InitChannelAsync(channelObject, cancellationToken).ConfigureAwait(false);
 
         _plc.WriteData -= OnWriteData;
         _plc.WriteData += OnWriteData;
 
         try
         {
-            if (channel.ChannelType == ChannelTypeEnum.TcpService)
+            if (channelObject.Channel.ChannelType == ChannelTypeEnum.TcpService)
                 await _plc.ConnectAsync(cancellationToken).ConfigureAwait(false);
         }
         catch

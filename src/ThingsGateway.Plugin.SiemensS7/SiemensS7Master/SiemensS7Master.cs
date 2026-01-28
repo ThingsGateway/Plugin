@@ -81,9 +81,9 @@ public class SiemensS7Master : CollectFoundationBase
 
 
 
-    protected override async Task InitChannelAsync(IChannel? channel = null, CancellationToken cancellationToken = default)
+    protected override async Task InitChannelAsync(ChannelObject channelObject = null, CancellationToken cancellationToken = default)
     {
-        ArgumentNullException.ThrowIfNull(channel);
+        ArgumentNullException.ThrowIfNull(channelObject.Channel);
 
         var plc = _plc;
         _plc = new();
@@ -98,8 +98,8 @@ public class SiemensS7Master : CollectFoundationBase
         _plc.LocalTSAP = _driverPropertys.LocalTSAP;
         _plc.Rack = _driverPropertys.Rack;
         _plc.Slot = _driverPropertys.Slot;
-        _plc.InitChannel(channel, LogMessage);
-        await base.InitChannelAsync(channel, cancellationToken).ConfigureAwait(false);
+        _plc.InitChannel(channelObject, LogMessage);
+        await base.InitChannelAsync(channelObject, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
