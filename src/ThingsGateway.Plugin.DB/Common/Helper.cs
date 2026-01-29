@@ -14,7 +14,7 @@ using ThingsGateway.Plugin.SqlDB;
 
 namespace ThingsGateway.Plugin.DB;
 
-internal static class Helper
+public static class Helper
 {
     #region
     public static SQLHistoryValue AdaptSQLHistoryValue(this VariableRuntime src)
