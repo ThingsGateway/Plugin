@@ -8,6 +8,9 @@
 //  QQ群：605534569
 //------------------------------------------------------------------------------
 
+using ThingsGateway.Foundation;
+using ThingsGateway.Foundation.Common.StringExtension;
+
 namespace ThingsGateway.Plugin.Webhook;
 
 /// <summary>
@@ -24,4 +27,21 @@ public partial class Webhook : BusinessBaseWithCacheIntervalScriptAll
     /// <inheritdoc/>
     public override bool IsConnected() => success;
 #endif
+
+    protected override Task InitChannelAsync(ChannelObject channelObject, CancellationToken cancellationToken)
+    {
+        if (_driverPropertys.DeviceTopic.IsNullOrEmpty())
+        {
+            DevModelEnable = false;
+        }
+        if (_driverPropertys.AlarmTopic.IsNullOrEmpty())
+        {
+            AlarmModelEnable = false;
+        }
+        if (_driverPropertys.PluginEventDataTopic.IsNullOrEmpty())
+        {
+            PluginEventDataModelEnable = false;
+        }
+        return base.InitChannelAsync(channelObject, cancellationToken);
+    }
 }

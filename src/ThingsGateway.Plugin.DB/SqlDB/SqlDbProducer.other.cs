@@ -33,7 +33,7 @@ public partial class SqlDBProducer : BusinessBaseWithCacheIntervalVariable
     {
         return UpdateVarModel(item.Select(a => a.Value).OrderBy(a => a.Id), cancellationToken);
     }
-    protected override void VariableTimeInterval(IEnumerable<VariableRuntime> variableRuntimes, IEnumerable<VariableBasicData> variables)
+    protected override void VariableTimeInterval(IEnumerable<VariableRuntime> variableRuntimes, List<VariableBasicData> variables)
     {
         if (_driverPropertys.IsHistoryDB)
         {
@@ -52,28 +52,43 @@ public partial class SqlDBProducer : BusinessBaseWithCacheIntervalVariable
         return UpdateVarModel(item, cancellationToken);
     }
 
-    private void TimeIntervalUpdateVariable(IEnumerable<VariableBasicData> variables)
+    private void TimeIntervalUpdateVariable(List<VariableBasicData> variables)
     {
         if (_driverPropertys.GroupUpdate)
         {
-            var data = variables is System.Collections.IList ? variables : variables.ToArray();
+            var data = variables;
             var varList = data.Where(a => a.BusinessGroup.IsNullOrEmpty());
             var varGroup = data.Where(a => !a.BusinessGroup.IsNullOrEmpty()).GroupBy(a => a.BusinessGroup);
 
             foreach (var group in varGroup)
             {
-                AddQueueVarModel(new CacheDBItem<List<VariableBasicData>>(group.ToList()));
+                AddQueueVarModels(new CacheDBItem<List<VariableBasicData>>(group.ToList()));
             }
-            foreach (var variable in varList)
+            if (_driverPropertys.EnableAtomicBatchEnqueue)
             {
-                AddQueueVarModel(new CacheDBItem<VariableBasicData>(variable));
+                AddQueueVarModels(new(varList.ToList()));
             }
+            else
+            {
+                foreach (var variable in varList)
+                {
+                    AddQueueVarModel(new CacheDBItem<VariableBasicData>(variable));
+                }
+            }
+
         }
         else
         {
-            foreach (var variable in variables)
+            if (_driverPropertys.EnableAtomicBatchEnqueue)
             {
-                AddQueueVarModel(new CacheDBItem<VariableBasicData>(variable));
+                AddQueueVarModels(new(variables));
+            }
+            else
+            {
+                foreach (var variable in variables)
+                {
+                    AddQueueVarModel(new CacheDBItem<VariableBasicData>(variable));
+                }
             }
         }
     }
@@ -84,7 +99,7 @@ public partial class SqlDBProducer : BusinessBaseWithCacheIntervalVariable
         {
             if (_driverPropertys.GroupUpdate && variable.BusinessGroupUpdateTrigger && !variable.BusinessGroup.IsNullOrEmpty() && VariableRuntimeGroups.TryGetValue(variable.BusinessGroup, out var variableRuntimeGroup))
             {
-                AddQueueVarModel(new CacheDBItem<List<VariableBasicData>>(variableRuntimeGroup.AdaptListVariableBasicData()));
+                AddQueueVarModels(new CacheDBItem<List<VariableBasicData>>(variableRuntimeGroup.AdaptListVariableBasicData()));
             }
             else
             {

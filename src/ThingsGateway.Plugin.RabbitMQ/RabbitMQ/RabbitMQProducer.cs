@@ -12,6 +12,7 @@ using RabbitMQ.Client;
 
 using ThingsGateway.Foundation;
 using ThingsGateway.Foundation.Common.PooledAwait;
+using ThingsGateway.Foundation.Common.StringExtension;
 
 namespace ThingsGateway.Plugin.RabbitMQ;
 
@@ -47,6 +48,20 @@ public partial class RabbitMQProducer : BusinessBaseWithCacheIntervalScriptAll
         };
 
         #endregion 初始化
+
+        if (_driverPropertys.DeviceTopic.IsNullOrEmpty())
+        {
+            DevModelEnable = false;
+        }
+        if (_driverPropertys.AlarmTopic.IsNullOrEmpty())
+        {
+            AlarmModelEnable = false;
+        }
+        if (_driverPropertys.PluginEventDataTopic.IsNullOrEmpty())
+        {
+            PluginEventDataModelEnable = false;
+        }
+
         await base.InitChannelAsync(channelObject, cancellationToken).ConfigureAwait(false);
     }
 

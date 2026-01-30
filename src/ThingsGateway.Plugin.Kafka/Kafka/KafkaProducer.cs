@@ -85,6 +85,20 @@ public partial class KafkaProducer : BusinessBaseWithCacheIntervalScriptAll
         #endregion Kafka 生产者
 
         #endregion 初始化
+
+        if (_driverPropertys.DeviceTopic.IsNullOrEmpty())
+        {
+            DevModelEnable = false;
+        }
+        if (_driverPropertys.AlarmTopic.IsNullOrEmpty())
+        {
+            AlarmModelEnable = false;
+        }
+        if (_driverPropertys.PluginEventDataTopic.IsNullOrEmpty())
+        {
+            PluginEventDataModelEnable = false;
+        }
+
         await base.InitChannelAsync(channelObject, cancellationToken).ConfigureAwait(false);
     }
 
