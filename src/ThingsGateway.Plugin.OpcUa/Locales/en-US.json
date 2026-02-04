@@ -17,7 +17,8 @@
     "SourceTimestampEnable": "SourceTimestampEnable",
     "UpdateRate": "UpdateRate",
     "UserName": "UserName",
-    "UseSecurity": "UseSecurity"
+    "UseSecurity": "UseSecurity",
+    "DataChangeTrigger": "DataChangeTrigger"
   },
   "ThingsGateway.Plugin.OpcUa.OpcUaServerProperty": {
     "AutoAcceptUntrustedCertificates": "AutoAcceptUntrustedCertificates",

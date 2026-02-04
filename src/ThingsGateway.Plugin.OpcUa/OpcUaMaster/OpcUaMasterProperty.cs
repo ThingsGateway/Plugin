@@ -8,6 +8,7 @@
 //  QQ群：605534569
 //------------------------------------------------------------------------------
 
+using Opc.Ua;
 using ThingsGateway.Gateway.Application;
 
 namespace ThingsGateway.Plugin.OpcUa;
@@ -40,6 +41,9 @@ public class OpcUaMasterProperty : CollectPropertyRetryBase
     /// </summary>
     [DynamicProperty]
     public bool CheckDomain { get; set; }
+
+    [DynamicProperty]
+    public DataChangeTrigger DataChangeTrigger { get; set; } = DataChangeTrigger.StatusValue;
 
     /// <summary>
     /// 安全策略

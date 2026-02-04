@@ -17,7 +17,8 @@
     "SourceTimestampEnable": "服务端时间戳",
     "UpdateRate": "推送间隔",
     "UserName": "登录账号",
-    "UseSecurity": "安全策略"
+    "UseSecurity": "安全策略",
+    "DataChangeTrigger": "订阅模式"
   },
   "ThingsGateway.Plugin.OpcUa.OpcUaServerProperty": {
     "AutoAcceptUntrustedCertificates": "自动接受不受信任的证书",

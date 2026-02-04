@@ -74,6 +74,7 @@ public class OpcUaMaster : CollectBase
             CheckDomain = _driverProperties.CheckDomain,
             LoadType = _driverProperties.LoadType,
             AutoAcceptUntrustedCertificates = _driverProperties.AutoAcceptUntrustedCertificates,
+            DataChangeTrigger = _driverProperties.DataChangeTrigger,
         };
 
         var plc = _plc;
