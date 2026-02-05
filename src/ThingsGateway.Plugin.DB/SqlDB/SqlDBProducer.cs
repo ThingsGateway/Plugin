@@ -284,7 +284,9 @@ public partial class SqlDBProducer : BusinessBaseWithCacheIntervalVariable
 
     private ISqlQueryable<SQLNumberHistoryValue> Query(DBHistoryValuePageInput input)
     {
+#pragma warning disable CA2000 // 丢失范围之前释放对象
         var db = SqlDBBusinessDatabaseUtil.GetDb(_driverPropertys);
+#pragma warning restore CA2000 // 丢失范围之前释放对象
 
         var query = db.Queryable<SQLNumberHistoryValue>().SplitTable()
                            .WhereIF(input.StartTime != null, a => a.CreateTime >= input.StartTime)
@@ -308,7 +310,9 @@ public partial class SqlDBProducer : BusinessBaseWithCacheIntervalVariable
         {
             return new();
         }
+#pragma warning disable CA2000 // 丢失范围之前释放对象
         var db = SqlDBBusinessDatabaseUtil.GetDb(_driverPropertys);
+#pragma warning restore CA2000 // 丢失范围之前释放对象
         var ret = new QueryData<SQLNumberHistoryValue>()
         {
             IsSorted = option.SortOrder != SortOrder.Unset,
@@ -352,7 +356,9 @@ public partial class SqlDBProducer : BusinessBaseWithCacheIntervalVariable
         {
             return new();
         }
+#pragma warning disable CA2000 // 丢失范围之前释放对象
         var db = SqlDBBusinessDatabaseUtil.GetDb(_driverPropertys);
+#pragma warning restore CA2000 // 丢失范围之前释放对象
         var ret = new QueryData<SQLRealValue>()
         {
             IsSorted = option.SortOrder != SortOrder.Unset,

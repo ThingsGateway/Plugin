@@ -95,6 +95,7 @@ public class ThingsGatewayNodeManager : CustomNodeManager2
             foreach (var item in _geviceGroup)
             {
                 //设备树会有两层
+#pragma warning disable CA2000 // 丢失范围之前释放对象
                 FolderState fs = CreateFolder(rootFolder, item.FirstOrDefault().DeviceRuntime);
                 fs.AddReference(ReferenceTypes.Organizes, true, ObjectIds.ObjectsFolder);
                 fs.EventNotifier = EventNotifiers.SubscribeToEvents;
@@ -103,6 +104,7 @@ public class ThingsGatewayNodeManager : CustomNodeManager2
                     foreach (var item2 in item)
                     {
                         CreateVariable(fs, item2);
+#pragma warning restore CA2000 // 丢失范围之前释放对象
                     }
                 }
             }

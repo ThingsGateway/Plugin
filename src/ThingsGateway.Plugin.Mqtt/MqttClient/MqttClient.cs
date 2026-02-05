@@ -83,7 +83,9 @@ public partial class MqttClient : BusinessBaseWithCacheIntervalScriptAll
 #if NET10_0_OR_GREATER
         var cert = X509CertificateLoader.LoadCertificateFromFile(certPath);
 #else
+#pragma warning disable CA2000 // 丢失范围之前释放对象
         var cert = new X509Certificate2(certPath);
+#pragma warning restore CA2000 // 丢失范围之前释放对象
 #endif
         using var reader = new StreamReader(keyPath);
         var pemReader = new Org.BouncyCastle.OpenSsl.PemReader(reader);
@@ -121,10 +123,12 @@ public partial class MqttClient : BusinessBaseWithCacheIntervalScriptAll
             {
                 throw new Exception("CAFile不能为空");
             }
+#pragma warning disable CA2000 // 丢失范围之前释放对象
 #if NET10_0_OR_GREATER
             var caCert = X509CertificateLoader.LoadCertificateFromFile(_driverPropertys.CAFile);
 #else
             var caCert = new X509Certificate2(_driverPropertys.CAFile);
+#pragma warning restore CA2000 // 丢失范围之前释放对象
 #endif
             mqttClientOptionsBuilder = mqttClientOptionsBuilder.WithTlsOptions(a =>
             {

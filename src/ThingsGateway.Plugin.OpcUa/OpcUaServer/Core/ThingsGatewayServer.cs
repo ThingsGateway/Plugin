@@ -235,7 +235,9 @@ public partial class ThingsGatewayServer : StandardServer
         // 有权配置服务器的用户
         if (userName == userInfo.Account && password.SequenceEqual(Encoding.UTF8.GetBytes(userInfo.Password)))
         {
+#pragma warning disable CA2000 // 丢失范围之前释放对象
             return new SystemConfigurationIdentity(new UserIdentity(userNameToken));
+#pragma warning restore CA2000 // 丢失范围之前释放对象
         }
         else
         {

@@ -36,7 +36,7 @@ namespace ThingsGateway.Plugin.OpcUa
         {
             try
             {
-                var plc = new ThingsGateway.Foundation.OpcUa.OpcUaMaster();
+                await using var plc = new ThingsGateway.Foundation.OpcUa.OpcUaMaster();
                 await plc.CheckApplicationInstanceCertificate().ConfigureAwait(false);
                 string path = $"{AppContext.BaseDirectory}OPCUAClientCertificate/pki/trustedPeer/certs";
                 Directory.CreateDirectory(path);

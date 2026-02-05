@@ -174,7 +174,7 @@ public partial class Webhook : BusinessBaseWithCacheIntervalScriptAll
         {
             // 设置请求内容
             //var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var content = new ByteArrayContent(topicArray.Payload);
+            using var content = new ByteArrayContent(topicArray.Payload);
             content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
 
             try

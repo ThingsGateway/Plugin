@@ -21,11 +21,13 @@ namespace ThingsGateway.Plugin.OpcUa;
 public class OpcUaTelemetryContext : TelemetryContextBase
 {
     public OpcUaTelemetryContext(ILog log)
+#pragma warning disable CA2000 // 丢失范围之前释放对象
         : base(Microsoft.Extensions.Logging.LoggerFactory.Create(builder =>
         {
             builder.ClearProviders()
                 .AddProvider(new OpcUaLoggerProvider(log));
         }))
+#pragma warning restore CA2000 // 丢失范围之前释放对象
     {
     }
 }
