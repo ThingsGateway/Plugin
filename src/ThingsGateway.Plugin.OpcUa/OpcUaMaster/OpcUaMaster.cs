@@ -117,7 +117,7 @@ public class OpcUaMaster : CollectBase
     {
         var list = base.ProtectedGetTasks(cancellationToken);
 
-        var check = ScheduledTaskHelper.GetTask("3000", CheckAsync, null, LogMessage, cancellationToken);
+        var check = ScheduledTaskHelper.GetTask("10000", CheckAsync, null, LogMessage, cancellationToken);
         list.Add(check);
         var checkConnec = ScheduledTaskHelper.GetTask("10000", CheckConnectAsync, null, LogMessage, cancellationToken);
         list.Add(checkConnec);
