@@ -93,7 +93,7 @@ public partial class QuestDBProducer : BusinessBaseWithCacheIntervalVariable
     {
         try
         {
-            using var db = BusinessDatabaseUtil.GetDb(_driverPropertys.DbType, _driverPropertys.BigTextConnectStr);
+            using var db = SqlDBBusinessDatabaseUtil.GetDb(_driverPropertys.DbType, _driverPropertys.BigTextConnectStr, LogMessage);
             if (!_driverPropertys.BigTextScriptHistoryTable.IsNullOrEmpty())
             {
                 var hisModel = CSharpScriptEngineExtension.Do<DynamicSQLBase>(_driverPropertys.BigTextScriptHistoryTable);
@@ -134,7 +134,7 @@ public partial class QuestDBProducer : BusinessBaseWithCacheIntervalVariable
 
     protected override async Task InitChannelAsync(ChannelObject channelObject, CancellationToken cancellationToken)
     {
-        _db = BusinessDatabaseUtil.GetDb(_driverPropertys.DbType, _driverPropertys.BigTextConnectStr);
+        _db = SqlDBBusinessDatabaseUtil.GetDb(_driverPropertys.DbType, _driverPropertys.BigTextConnectStr, LogMessage);
 
         await base.InitChannelAsync(channelObject, cancellationToken).ConfigureAwait(false);
     }
@@ -176,7 +176,9 @@ public partial class QuestDBProducer : BusinessBaseWithCacheIntervalVariable
     }
     internal ISqlQueryable<QuestDBNumberHistoryValue> Query(DBHistoryValuePageInput input)
     {
-        var db = BusinessDatabaseUtil.GetDb(_driverPropertys.DbType, _driverPropertys.BigTextConnectStr);
+#pragma warning disable CA2000 // 丢失范围之前释放对象
+        var db = SqlDBBusinessDatabaseUtil.GetDb(_driverPropertys.DbType, _driverPropertys.BigTextConnectStr, LogMessage);
+#pragma warning restore CA2000 // 丢失范围之前释放对象
         var query = db.Queryable<QuestDBNumberHistoryValue>().AS(_driverPropertys.NumberTableName)
                              .WhereIF(input.StartTime != null, a => a.CreateTime >= input.StartTime)
                            .WhereIF(input.EndTime != null, a => a.CreateTime <= input.EndTime)
@@ -195,7 +197,7 @@ public partial class QuestDBProducer : BusinessBaseWithCacheIntervalVariable
 
     internal async Task<QueryData<QuestDBNumberHistoryValue>> QueryData(QueryPageOptions option)
     {
-        using var db = BusinessDatabaseUtil.GetDb(_driverPropertys.DbType, _driverPropertys.BigTextConnectStr);
+        using var db = SqlDBBusinessDatabaseUtil.GetDb(_driverPropertys.DbType, _driverPropertys.BigTextConnectStr, LogMessage);
         var ret = new QueryData<QuestDBNumberHistoryValue>()
         {
             IsSorted = option.SortOrder != SortOrder.Unset,

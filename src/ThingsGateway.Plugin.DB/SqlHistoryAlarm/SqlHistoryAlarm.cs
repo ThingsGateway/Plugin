@@ -97,7 +97,7 @@ public partial class SqlHistoryAlarm : BusinessBaseWithCacheAlarm
         {
             if (_driverPropertys.VariableAlarmEnable == false) return;
 
-            using var db = BusinessDatabaseUtil.GetDb((DatabaseType)_driverPropertys.DbType, _driverPropertys.BigTextConnectStr);
+            using var db = SqlDBBusinessDatabaseUtil.GetDb((DatabaseType)_driverPropertys.DbType, _driverPropertys.BigTextConnectStr, LogMessage);
             if (!_driverPropertys.BigTextScriptHistoryTable.IsNullOrEmpty())
             {
                 var hisModel = CSharpScriptEngineExtension.Do<DynamicSQLBase>(_driverPropertys.BigTextScriptHistoryTable);
@@ -127,7 +127,7 @@ public partial class SqlHistoryAlarm : BusinessBaseWithCacheAlarm
     protected override async Task InitChannelAsync(ChannelObject channelObject, CancellationToken cancellationToken)
     {
 
-        _db = BusinessDatabaseUtil.GetDb((DatabaseType)_driverPropertys.DbType, _driverPropertys.BigTextConnectStr);
+        _db = SqlDBBusinessDatabaseUtil.GetDb((DatabaseType)_driverPropertys.DbType, _driverPropertys.BigTextConnectStr, LogMessage);
 
         await base.InitChannelAsync(channelObject, cancellationToken).ConfigureAwait(false);
     }
@@ -182,7 +182,7 @@ public partial class SqlHistoryAlarm : BusinessBaseWithCacheAlarm
 
     internal ISqlQueryable<HistoryAlarm> Query(DBHistoryAlarmPageInput input)
     {
-        using var db = BusinessDatabaseUtil.GetDb((DatabaseType)_driverPropertys.DbType, _driverPropertys.BigTextConnectStr);
+        using var db = SqlDBBusinessDatabaseUtil.GetDb((DatabaseType)_driverPropertys.DbType, _driverPropertys.BigTextConnectStr, LogMessage);
         var query = db.Queryable<HistoryAlarm>().AS(_driverPropertys.TableName)
                              .WhereIF(input.StartTime != null, a => a.EventTime >= input.StartTime)
                            .WhereIF(input.EndTime != null, a => a.AlarmTime <= input.EndTime)
@@ -202,7 +202,7 @@ public partial class SqlHistoryAlarm : BusinessBaseWithCacheAlarm
 
     internal async Task<QueryData<HistoryAlarm>> QueryData(QueryPageOptions option)
     {
-        using var db = BusinessDatabaseUtil.GetDb((DatabaseType)_driverPropertys.DbType, _driverPropertys.BigTextConnectStr);
+        using var db = SqlDBBusinessDatabaseUtil.GetDb((DatabaseType)_driverPropertys.DbType, _driverPropertys.BigTextConnectStr, LogMessage);
         var ret = new QueryData<HistoryAlarm>()
         {
             IsSorted = option.SortOrder != SortOrder.Unset,

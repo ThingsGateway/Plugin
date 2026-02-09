@@ -124,40 +124,12 @@ public partial class OpcUaServer : BusinessBase
     {
         ApplicationInstance.MessageDlg = null;
         DefaultTelemetryContext?.LoggerFactory.TryDispose();
-        if (m_server != null)
-        {
-            try
-            {
-                //https://github.com/OPCFoundation/UA-.NETStandard/pull/3113
 
-                if (m_server?.MessageContext?.Factory != null)
-                {
-                    var typeDict = m_server.MessageContext.Factory.GetValueEx(m_server.MessageContext.Factory.GetType(), "m_encodeableTypes") as Dictionary<ExpandedNodeId, Type>;
-                    typeDict.Clear();
-                    m_server.MessageContext.Factory.TryDispose();
-                }
-
-                var listeners = m_server.GetValueEx(m_server.GetType(), "TransportListeners") as List<ITransportListener>;
-                if (listeners != null)
-                {
-                    foreach (var item in listeners)
-                    {
-                        if (item is TcpTransportListener transportListener)
-                        {
-                            var timer = transportListener.GetValueEx(transportListener.GetType(), "m_inactivityDetectionTimer") as IDisposable;
-                            timer?.TryDispose();
-                        }
-                    }
-                }
-            }
-            catch
-            {
-            }
-        }
         if (m_server != null)
             await m_server.StopAsync(CancellationToken.None).ConfigureAwait(false);
         m_server?.NodeManager?.TryDispose();
         m_server?.TryDispose();
+
     }
     /// <inheritdoc/>
     public override bool IsConnected()

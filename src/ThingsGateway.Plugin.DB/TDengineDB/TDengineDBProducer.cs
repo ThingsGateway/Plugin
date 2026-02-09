@@ -84,8 +84,7 @@ public partial class TDengineDBProducer : BusinessBaseWithCacheIntervalVariable
 
     protected override async Task InitChannelAsync(ChannelObject channelObject, CancellationToken cancellationToken)
     {
-        _db = TDengineDBUtil.GetDb(_driverPropertys.DbType, _driverPropertys.BigTextConnectStr, _driverPropertys.NumberTableNameLow);
-
+        _db = SqlDBBusinessDatabaseUtil.GetTDDb(_driverPropertys.DbType, _driverPropertys.BigTextConnectStr, _driverPropertys.NumberTableNameLow, LogMessage);
         await base.InitChannelAsync(channelObject, cancellationToken).ConfigureAwait(false);
     }
 
@@ -153,7 +152,7 @@ public partial class TDengineDBProducer : BusinessBaseWithCacheIntervalVariable
     }
     internal ISqlQueryable<TDengineDBNumberHistoryValue> Query(DBHistoryValuePageInput input, string tableName)
     {
-        var db = TDengineDBUtil.GetDb(_driverPropertys.DbType, _driverPropertys.BigTextConnectStr, tableName);
+        var db = SqlDBBusinessDatabaseUtil.GetTDDb(_driverPropertys.DbType, _driverPropertys.BigTextConnectStr, tableName, LogMessage);
         var query = db.Queryable<TDengineDBNumberHistoryValue>().AsTDengineSTable()
                              .WhereIF(input.StartTime != null, a => a.CreateTime >= input.StartTime)
                            .WhereIF(input.EndTime != null, a => a.CreateTime <= input.EndTime)
@@ -172,7 +171,7 @@ public partial class TDengineDBProducer : BusinessBaseWithCacheIntervalVariable
 
     internal async Task<QueryData<TDengineDBNumberHistoryValue>> QueryData(QueryPageOptions option)
     {
-        var db = TDengineDBUtil.GetDb(_driverPropertys.DbType, _driverPropertys.BigTextConnectStr, _driverPropertys.NumberTableNameLow);
+        var db = SqlDBBusinessDatabaseUtil.GetTDDb(_driverPropertys.DbType, _driverPropertys.BigTextConnectStr, _driverPropertys.NumberTableNameLow, LogMessage);
         var ret = new QueryData<TDengineDBNumberHistoryValue>()
         {
             IsSorted = option.SortOrder != SortOrder.Unset,

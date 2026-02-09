@@ -106,7 +106,7 @@ public partial class SqlDBProducer : BusinessBaseWithCacheIntervalVariable
     {
         try
         {
-            using var db = SqlDBBusinessDatabaseUtil.GetDb(_driverPropertys);
+            using var db = SqlDBBusinessDatabaseUtil.GetDb(_driverPropertys, LogMessage);
             if (!_driverPropertys.BigTextScriptHistoryTable.IsNullOrEmpty())
             {
                 var hisModel = CSharpScriptEngineExtension.Do<DynamicSQLBase>(_driverPropertys.BigTextScriptHistoryTable);
@@ -186,7 +186,7 @@ public partial class SqlDBProducer : BusinessBaseWithCacheIntervalVariable
 
     protected override async Task InitChannelAsync(ChannelObject channelObject, CancellationToken cancellationToken)
     {
-        _db = SqlDBBusinessDatabaseUtil.GetDb(_driverPropertys);
+        _db = SqlDBBusinessDatabaseUtil.GetDb(_driverPropertys, LogMessage);
 
         if (_businessPropertyWithCacheInterval.BusinessUpdateEnum == BusinessUpdateEnum.Interval && _driverPropertys.IsReadDB)
         {
@@ -285,7 +285,7 @@ public partial class SqlDBProducer : BusinessBaseWithCacheIntervalVariable
     private ISqlQueryable<SQLNumberHistoryValue> Query(DBHistoryValuePageInput input)
     {
 #pragma warning disable CA2000 // 丢失范围之前释放对象
-        var db = SqlDBBusinessDatabaseUtil.GetDb(_driverPropertys);
+        var db = SqlDBBusinessDatabaseUtil.GetDb(_driverPropertys, LogMessage);
 #pragma warning restore CA2000 // 丢失范围之前释放对象
 
         var query = db.Queryable<SQLNumberHistoryValue>().SplitTable()
@@ -311,7 +311,7 @@ public partial class SqlDBProducer : BusinessBaseWithCacheIntervalVariable
             return new();
         }
 #pragma warning disable CA2000 // 丢失范围之前释放对象
-        var db = SqlDBBusinessDatabaseUtil.GetDb(_driverPropertys);
+        var db = SqlDBBusinessDatabaseUtil.GetDb(_driverPropertys, LogMessage);
 #pragma warning restore CA2000 // 丢失范围之前释放对象
         var ret = new QueryData<SQLNumberHistoryValue>()
         {
@@ -357,7 +357,7 @@ public partial class SqlDBProducer : BusinessBaseWithCacheIntervalVariable
             return new();
         }
 #pragma warning disable CA2000 // 丢失范围之前释放对象
-        var db = SqlDBBusinessDatabaseUtil.GetDb(_driverPropertys);
+        var db = SqlDBBusinessDatabaseUtil.GetDb(_driverPropertys, LogMessage);
 #pragma warning restore CA2000 // 丢失范围之前释放对象
         var ret = new QueryData<SQLRealValue>()
         {

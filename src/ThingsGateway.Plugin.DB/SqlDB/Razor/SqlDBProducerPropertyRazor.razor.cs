@@ -21,7 +21,6 @@ using ThingsGateway.Foundation.Common;
 using ThingsGateway.Gateway.Razor;
 using ThingsGateway.Plugin.DB;
 using ThingsGateway.Plugin.SqlDB;
-using ThingsGateway.Plugin.TDengineDB;
 using ThingsGateway.SqlOrm;
 
 using TouchSocket.Core;
@@ -80,7 +79,7 @@ namespace ThingsGateway.Debug
             StringBuilder stringBuilder=new($"Compilation successful{Environment.NewLine}");
 
             getDeviceModel.Logger=new EasyLogger(a=>stringBuilder.AppendLine(a));
-                    using    var db = SqlDBBusinessDatabaseUtil.GetDb(businessProperty);
+                    using    var db = SqlDBBusinessDatabaseUtil.GetDb(businessProperty,null);
                 await getDeviceModel.DBInit(db,default);
               await getDeviceModel.DBInsertable(db,data,default);
             getDeviceModel?.TryDispose();
@@ -203,9 +202,9 @@ namespace ThingsGateway.Debug
              ISqlOrmClient db=null;
 
                  if(businessProperty.DbType==SqlOrm.DatabaseType.TDengine)
-        db = TDengineDBUtil.GetDb(businessProperty.DbType, businessProperty.BigTextConnectStr, businessProperty.NumberTableNameLow);
+        db = SqlDBBusinessDatabaseUtil.GetTDDb(businessProperty.DbType, businessProperty.BigTextConnectStr, businessProperty.NumberTableNameLow,null);
             else
-        db = BusinessDatabaseUtil.GetDb(businessProperty.DbType, businessProperty.BigTextConnectStr);
+        db = SqlDBBusinessDatabaseUtil.GetDb(businessProperty.DbType, businessProperty.BigTextConnectStr,null);
 
                 await getDeviceModel.DBInit(db,default);
               await getDeviceModel.DBInsertable(db,data,default);
