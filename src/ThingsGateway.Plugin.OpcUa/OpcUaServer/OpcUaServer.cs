@@ -114,7 +114,8 @@ public partial class OpcUaServer : BusinessBase
         m_application.ApplicationConfiguration = m_configuration;
         if (m_configuration.SecurityConfiguration.AutoAcceptUntrustedCertificates)
         {
-            m_configuration.CertificateValidator.CertificateValidation += (s, e) => e.Accept = (e.Error.StatusCode == StatusCodes.BadCertificateUntrusted);
+            m_configuration.CertificateValidator.CertificateValidation += (s, e) =>
+            e.Accept = true;
         }
 
         m_server = new(this);
