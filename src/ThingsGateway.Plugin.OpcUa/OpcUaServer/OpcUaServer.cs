@@ -12,7 +12,6 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 
 using Opc.Ua;
-using Opc.Ua.Bindings;
 using Opc.Ua.Configuration;
 using System.Collections.Frozen;
 using ThingsGateway.Foundation.Common;
@@ -107,7 +106,7 @@ public partial class OpcUaServer : BusinessBase
     private async Task UaInit()
     {
         ApplicationInstance.MessageDlg = new ApplicationMessageDlg(LogMessage);//默认返回true
-        DefaultTelemetryContext = new OpcUaTelemetryContext(LogMessage);
+        DefaultTelemetryContext = new OpcUaTelemetryContext((level, source, message, ex) => LogMessage.Log((TouchSocket.Core.LogLevel)level, source, message, ex));
         m_application = new ApplicationInstance(DefaultTelemetryContext);
         m_configuration = await GetDefaultConfigurationAsync().ConfigureAwait(false);
         await m_configuration.ValidateAsync(ApplicationType.Server).ConfigureAwait(false);
@@ -160,6 +159,8 @@ public partial class OpcUaServer : BusinessBase
         await m_application.CheckApplicationInstanceCertificatesAsync(true, 1200, cancellationToken).ConfigureAwait(false);
 
         await m_application.StartAsync(m_server).ConfigureAwait(false);
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
         //IdVariableRuntimes.ForEach(a => VariableCollectChange(a.Value));
         await base.ProtectedStartAsync(cancellationToken).ConfigureAwait(false);
     }
@@ -179,6 +180,8 @@ public partial class OpcUaServer : BusinessBase
                         await Task.Delay(2000, cancellationToken).ConfigureAwait(false);
                         await @this.m_application.CheckApplicationInstanceCertificatesAsync(true, 1200, cancellationToken).ConfigureAwait(false);
                         await @this.m_application.StartAsync(@this.m_server).ConfigureAwait(false);
+                        GC.Collect();
+                        GC.WaitForPendingFinalizers();
                         @this.connect_success = true;
                         await Task.Delay(2000, cancellationToken).ConfigureAwait(false);
                         //@this.IdVariableRuntimes.ForEach(a => @this.VariableCollectChange(a.Value));
