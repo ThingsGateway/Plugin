@@ -65,7 +65,6 @@ public class OpcUaMaster : CollectBase
             OpcUrl = _driverProperties.OpcUrl,
             UpdateRate = _driverProperties.UpdateRate,
             DeadBand = _driverProperties.DeadBand,
-            GroupSize = _driverProperties.GroupSize,
             KeepAliveInterval = _driverProperties.KeepAliveInterval,
             UseSecurity = _driverProperties.UseSecurity,
             ActiveSubscribe = _driverProperties.ActiveSubscribe,

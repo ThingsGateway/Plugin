@@ -370,7 +370,6 @@ public partial class OpcUaImportVariable
         data.DevicePropertys.Add(nameof(OpcUaMasterProperty.UseSecurity), Plc.OpcUaProperty.UseSecurity.ToString());
         data.DevicePropertys.Add(nameof(OpcUaMasterProperty.ActiveSubscribe), true.ToString());
         data.DevicePropertys.Add(nameof(OpcUaMasterProperty.DeadBand), Plc.OpcUaProperty.DeadBand.ToString());
-        data.DevicePropertys.Add(nameof(OpcUaMasterProperty.GroupSize), Plc.OpcUaProperty.GroupSize.ToString());
         data.DevicePropertys.Add(nameof(OpcUaMasterProperty.UpdateRate), Plc.OpcUaProperty.UpdateRate.ToString());
         data.DevicePropertys.Add(nameof(OpcUaMasterProperty.KeepAliveInterval), Plc.OpcUaProperty.KeepAliveInterval.ToString());
         return data;
