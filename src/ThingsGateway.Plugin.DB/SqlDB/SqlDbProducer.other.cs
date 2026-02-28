@@ -39,7 +39,13 @@ public partial class SqlDBProducer : BusinessBaseWithCacheIntervalVariable
         {
             TimeIntervalUpdateVariable(variables);
         }
-
+        if (_driverPropertys.IsReadDB)
+        {
+            foreach (var variable in variables)
+            {
+                RealTimeVariables.AddOrUpdate(variable.Id, variable, (key, oldValue) => variable);
+            }
+        }
         base.VariableTimeInterval(variableRuntimes, variables);
     }
     protected override void VariableChange(VariableRuntime variableRuntime, VariableBasicData variable)
@@ -166,7 +172,7 @@ public partial class SqlDBProducer : BusinessBaseWithCacheIntervalVariable
                         //var result = await db.Insertable(dbInserts).SplitTable().ExecuteCommandAsync().ConfigureAwait(false);
                         if (result > 0)
                         {
-                            @this.LogMessage?.Trace($"TableName：{@this._driverPropertys.NumberTableName}，Count：{result}，watchTime:  {stopwatch.ElapsedMilliseconds} ms");
+                            @this.LogMessage?.Debug($"TableName：{@this._driverPropertys.NumberTableName}，Count：{result}，watchTime:  {stopwatch.ElapsedMilliseconds} ms");
                         }
                     }
 
@@ -181,7 +187,7 @@ public partial class SqlDBProducer : BusinessBaseWithCacheIntervalVariable
                         //var result = await db.Insertable(dbInserts).SplitTable().ExecuteCommandAsync().ConfigureAwait(false);
                         if (result > 0)
                         {
-                            @this.LogMessage?.Trace($"TableName：{@this._driverPropertys.StringTableName}，Count：{result}，watchTime:  {stopwatch.ElapsedMilliseconds} ms");
+                            @this.LogMessage?.Debug($"TableName：{@this._driverPropertys.StringTableName}，Count：{result}，watchTime:  {stopwatch.ElapsedMilliseconds} ms");
                         }
                     }
                 }
@@ -226,7 +232,7 @@ public partial class SqlDBProducer : BusinessBaseWithCacheIntervalVariable
                         stopwatch.Stop();
                         if (result > 0)
                         {
-                            @this.LogMessage?.Trace($"RealTable Insert Data Count：{result}，watchTime:  {stopwatch.ElapsedMilliseconds} ms");
+                            @this.LogMessage?.Debug($"RealTable Insert Data Count：{result}，watchTime:  {stopwatch.ElapsedMilliseconds} ms");
                         }
                     }
                     {
@@ -241,7 +247,7 @@ public partial class SqlDBProducer : BusinessBaseWithCacheIntervalVariable
                             stopwatch.Stop();
                             if (result > 0)
                             {
-                                @this.LogMessage?.Trace($"RealTable Data Count：{result}，watchTime:  {stopwatch.ElapsedMilliseconds} ms");
+                                @this.LogMessage?.Debug($"RealTable Data Count：{result}，watchTime:  {stopwatch.ElapsedMilliseconds} ms");
                             }
                             return OperResult.Success;
                         }

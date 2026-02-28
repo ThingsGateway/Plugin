@@ -157,7 +157,7 @@ public partial class QuestDBProducer : BusinessBaseWithCacheIntervalVariable
                         //var result = await db.Insertable(dbInserts).SplitTable().ExecuteCommandAsync().ConfigureAwait(false);
                         if (result > 0)
                         {
-                            @this.LogMessage?.Trace($"TableName：{@this._driverPropertys.NumberTableName}，Count：{result}，watchTime:  {stopwatch.ElapsedMilliseconds} ms");
+                            @this.LogMessage?.Debug($"TableName：{@this._driverPropertys.NumberTableName}，Count：{result}，watchTime:  {stopwatch.ElapsedMilliseconds} ms");
                         }
                     }
 
@@ -181,7 +181,7 @@ public partial class QuestDBProducer : BusinessBaseWithCacheIntervalVariable
                         //var result = await db.Insertable(dbInserts).SplitTable().ExecuteCommandAsync().ConfigureAwait(false);
                         if (result > 0)
                         {
-                            @this.LogMessage?.Trace($"TableName：{@this._driverPropertys.StringTableName}，Count：{result}，watchTime:  {stopwatch.ElapsedMilliseconds} ms");
+                            @this.LogMessage?.Debug($"TableName：{@this._driverPropertys.StringTableName}，Count：{result}，watchTime:  {stopwatch.ElapsedMilliseconds} ms");
                         }
                     }
                 }

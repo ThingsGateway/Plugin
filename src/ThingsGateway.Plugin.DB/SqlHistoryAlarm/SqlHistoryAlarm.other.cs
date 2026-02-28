@@ -126,7 +126,7 @@ public partial class SqlHistoryAlarm : BusinessBaseWithCacheAlarm
                 //var result = await db.Insertable(dbInserts).SplitTable().ExecuteCommandAsync().ConfigureAwait(false);
                 if (result > 0)
                 {
-                    LogMessage?.Trace($"Count：{dbInserts.Count}，watchTime:  {stopwatch.ElapsedMilliseconds} ms");
+                    LogMessage?.Debug($"Count：{dbInserts.Count}，watchTime:  {stopwatch.ElapsedMilliseconds} ms");
                 }
                 return OperResult.Success;
             }

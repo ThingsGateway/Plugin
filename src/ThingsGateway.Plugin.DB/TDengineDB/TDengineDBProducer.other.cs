@@ -172,7 +172,7 @@ public partial class TDengineDBProducer : BusinessBaseWithCacheIntervalVariable
             stopwatch.Stop();
             //if (result > 0)
             {
-                @this.LogMessage?.Trace($"TableName：{tableName}，Count：{result}，watchTime:  {stopwatch.ElapsedMilliseconds} ms");
+                @this.LogMessage?.Debug($"TableName：{tableName}，Count：{result}，watchTime:  {stopwatch.ElapsedMilliseconds} ms");
             }
 
             return;
