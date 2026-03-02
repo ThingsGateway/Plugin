@@ -28,7 +28,6 @@ internal interface ISqlDBPageRpc : IRpcServer
 public partial class SqlDBPageRpc : SingletonRpcServer, IPluginRpcServer, ISqlDBPageRpc
 {
 
-    [DmtpRpc]
     public async Task<QueryData<SQLNumberHistoryValue>> OnSqlDBQueryHistoryAsync(long deviceId, QueryPageOptions options)
     {
 
@@ -38,7 +37,6 @@ public partial class SqlDBPageRpc : SingletonRpcServer, IPluginRpcServer, ISqlDB
         return query;
     }
 
-    [DmtpRpc]
     public async Task<QueryData<SQLRealValue>> OnSqlDBQueryRealAsync(long deviceId, QueryPageOptions options)
     {
         SqlDBProducer SqlDBProducer = GlobalData.TryGetDeviceRuntime(deviceId, out DeviceRuntime deviceRuntime) ? deviceRuntime.Driver as SqlDBProducer : null;

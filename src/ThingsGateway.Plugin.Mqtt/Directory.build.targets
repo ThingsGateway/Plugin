@@ -3,12 +3,13 @@
 
 
 	<Target Name="CopyNugetPackages" AfterTargets="Build">
-		<ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+		<ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
 			<!-- setting up the variable for convenience -->
-			<ApplicationPackageFiles Include="$(PkgMQTTnet_AspNetCore)\lib\net6.0\*.*" />
-			<MQTTnetApplicationPackageFiles Include="$(PkgMQTTnet)\lib\net6.0\*.*" />
+			<ApplicationPackageFiles Include="$(PkgMQTTnet_AspNetCore)\lib\net10.0\*.*" />
+			<MQTTnet_ServerApplicationPackageFiles Include="$(PkgMQTTnet_Server)\lib\net10.0\*.*" />
+			<MQTTnetApplicationPackageFiles Include="$(PkgMQTTnet)\lib\net10.0\*.*" />
 		</ItemGroup>
-		<ItemGroup Condition="'$(TargetFramework)' != 'net6.0'">
+		<ItemGroup Condition="'$(TargetFramework)' != 'net10.0'">
 			<!-- setting up the variable for convenience -->
 			<ApplicationPackageFiles Include="$(PkgMQTTnet_AspNetCore)\lib\net8.0\*.*" />
 			<MQTTnet_ServerApplicationPackageFiles Include="$(PkgMQTTnet_Server)\lib\net8.0\*.*" />

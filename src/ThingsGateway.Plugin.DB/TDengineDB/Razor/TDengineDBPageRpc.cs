@@ -26,7 +26,6 @@ internal interface ITDengineDBPageRpc : IRpcServer
 public partial class TDengineDBPageRpc : SingletonRpcServer, IPluginRpcServer, ITDengineDBPageRpc
 {
 
-    [DmtpRpc]
     public async Task<QueryData<TDengineDBNumberHistoryValue>> OnTDengineDBQueryAsync(long deviceId, QueryPageOptions options)
     {
         TDengineDBProducer TDengineDBProducer = GlobalData.TryGetDeviceRuntime(deviceId, out DeviceRuntime deviceRuntime) ? deviceRuntime.Driver as TDengineDBProducer : null;

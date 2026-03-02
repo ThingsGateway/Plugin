@@ -24,7 +24,6 @@ internal interface IHistoryAlarmPageRpc : IRpcServer
 public partial class HistoryAlarmPageRpc : SingletonRpcServer, IPluginRpcServer, IHistoryAlarmPageRpc
 {
 
-    [DmtpRpc]
     public async Task<QueryData<HistoryAlarm>> OnHistoryAlarmQueryAsync(long deviceId, QueryPageOptions options)
     {
         SqlHistoryAlarm SqlHistoryAlarmProducer = GlobalData.TryGetDeviceRuntime(deviceId, out DeviceRuntime deviceRuntime) ? deviceRuntime.Driver as SqlHistoryAlarm : null;

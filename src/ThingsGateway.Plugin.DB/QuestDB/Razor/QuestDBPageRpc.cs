@@ -26,7 +26,6 @@ internal interface IQuestDBPageRpc : IRpcServer
 public partial class QuestDBPageRpc : SingletonRpcServer, IPluginRpcServer, IQuestDBPageRpc
 {
 
-    [DmtpRpc]
     public async Task<QueryData<QuestDBNumberHistoryValue>> OnQuestDBQueryAsync(long deviceId, QueryPageOptions options)
     {
         QuestDBProducer QuestDBProducer = GlobalData.TryGetDeviceRuntime(deviceId, out DeviceRuntime deviceRuntime) ? deviceRuntime.Driver as QuestDBProducer : null;
