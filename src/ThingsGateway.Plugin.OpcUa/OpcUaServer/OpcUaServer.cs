@@ -107,6 +107,7 @@ public partial class OpcUaServer : BusinessBase
     {
         ApplicationInstance.MessageDlg = new ApplicationMessageDlg(LogMessage);//默认返回true
         DefaultTelemetryContext = new OpcUaTelemetryContext((level, source, message, ex) => LogMessage.Log((TouchSocket.Core.LogLevel)level, source, message, ex));
+
         m_application = new ApplicationInstance(DefaultTelemetryContext);
         m_configuration = await GetDefaultConfigurationAsync().ConfigureAwait(false);
         await m_configuration.ValidateAsync(ApplicationType.Server).ConfigureAwait(false);
@@ -123,13 +124,15 @@ public partial class OpcUaServer : BusinessBase
     private async Task UaDisposeAsync()
     {
         ApplicationInstance.MessageDlg = null;
-        DefaultTelemetryContext?.LoggerFactory.TryDispose();
+        DefaultTelemetryContext?.TryDispose();
 
         if (m_server != null)
             await m_server.StopAsync(CancellationToken.None).ConfigureAwait(false);
         m_server?.NodeManager?.TryDispose();
+        m_server?.NodeManager = null;
         m_server?.TryDispose();
-
+        m_server = null;
+        m_configuration.CertificateValidator = null;
     }
     /// <inheritdoc/>
     public override bool IsConnected()

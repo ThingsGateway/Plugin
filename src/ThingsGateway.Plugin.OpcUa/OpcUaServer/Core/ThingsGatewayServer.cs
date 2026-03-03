@@ -76,10 +76,32 @@ public partial class ThingsGatewayServer : StandardServer
 
         return resourceManager;
     }
-
+    public override ValueTask StopAsync(CancellationToken cancellationToken = default)
+    {
+        foreach (var item in TransportListeners)
+        {
+            try
+            {
+                item.Close();
+            }
+            catch (Exception e)
+            {
+                m_logger.LogError(
+                    e,
+                    "Unexpected error closing a listener {Name}.",
+                    item.GetType().FullName);
+            }
+            item.SafeDispose();
+        }
+        return base.StopAsync(cancellationToken);
+    }
     /// <inheritdoc/>
     protected override void Dispose(bool disposing)
     {
+        foreach (var item in TransportListeners)
+        {
+            item.SafeDispose();
+        }
         NodeManager?.SafeDispose();
         base.Dispose(disposing);
     }
