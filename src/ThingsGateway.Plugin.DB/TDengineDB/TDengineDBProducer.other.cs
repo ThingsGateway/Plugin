@@ -13,6 +13,7 @@ using System.Text;
 
 using ThingsGateway.Foundation;
 using ThingsGateway.Foundation.Common.Extension;
+using ThingsGateway.Foundation.Common.Json.Extension;
 using ThingsGateway.Foundation.Common.LinqExtension;
 using ThingsGateway.Foundation.Common.PooledAwait;
 using ThingsGateway.Plugin.DB;

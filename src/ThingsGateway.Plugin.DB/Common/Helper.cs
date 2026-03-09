@@ -9,6 +9,7 @@
 //------------------------------------------------------------------------------
 
 using ThingsGateway.Foundation.Common.Extension;
+using ThingsGateway.Foundation.Common.Json.Extension;
 using ThingsGateway.Plugin.QuestDB;
 using ThingsGateway.Plugin.SqlDB;
 
