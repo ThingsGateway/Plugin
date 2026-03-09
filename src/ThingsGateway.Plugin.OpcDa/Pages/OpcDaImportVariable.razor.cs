@@ -11,13 +11,12 @@
 #pragma warning disable CA2007 // 考虑对等待的任务调用 ConfigureAwait
 using BootstrapBlazor.Components;
 using Microsoft.Extensions.Localization;
-
 using System.Diagnostics.CodeAnalysis;
-
 using ThingsGateway.Common;
-using ThingsGateway.Foundation.Common;
+using ThingsGateway.Foundation;
 using ThingsGateway.Foundation.OpcDa;
 using ThingsGateway.Foundation.OpcDa.Rcw;
+
 
 
 

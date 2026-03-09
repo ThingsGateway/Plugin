@@ -8,7 +8,6 @@
 //  QQ群：605534569
 //------------------------------------------------------------------------------
 
-using ThingsGateway.Foundation.Common;
 using ThingsGateway.Foundation.Modbus;
 using ThingsGateway.Gateway.Application;
 

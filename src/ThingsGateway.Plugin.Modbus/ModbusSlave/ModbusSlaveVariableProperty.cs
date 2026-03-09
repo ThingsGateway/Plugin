@@ -9,8 +9,6 @@
 //------------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
-
-using ThingsGateway.Foundation.Common;
 using ThingsGateway.Gateway.Application;
 
 namespace ThingsGateway.Plugin.Modbus;

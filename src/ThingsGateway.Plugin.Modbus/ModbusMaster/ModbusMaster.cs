@@ -9,7 +9,6 @@
 //------------------------------------------------------------------------------
 
 using ThingsGateway.Debug;
-using ThingsGateway.Foundation.Common;
 using ThingsGateway.Gateway.Application;
 
 namespace ThingsGateway.Plugin.Modbus;

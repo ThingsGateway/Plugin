@@ -34,7 +34,6 @@ using ThingsGateway.Razor;
 using TouchSocket.Core;
 
 using ThingsGateway.Common;
-using ThingsGateway.Foundation.Common;
 using ThingsGateway.Foundation.Common.Extension;
 
 namespace ThingsGateway.Debug;

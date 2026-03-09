@@ -11,8 +11,6 @@
 using Microsoft.Extensions.Localization;
 
 using System.Collections.Concurrent;
-
-using ThingsGateway.Foundation.Common;
 using ThingsGateway.Foundation.Common.BitExtension;
 using ThingsGateway.Foundation.Common.DictionaryExtensions;
 using ThingsGateway.Foundation.Common.Extension;

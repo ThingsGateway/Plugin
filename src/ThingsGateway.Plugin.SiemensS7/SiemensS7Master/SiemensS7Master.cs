@@ -13,7 +13,6 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 
 using ThingsGateway.Debug;
-using ThingsGateway.Foundation.Common;
 using ThingsGateway.Foundation.Common.Json.Extension;
 using ThingsGateway.Foundation.Common.PooledAwait;
 using ThingsGateway.Foundation.SiemensS7;
