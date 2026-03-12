@@ -469,10 +469,6 @@ public partial class MqttServer : BusinessBaseWithCacheIntervalScriptAll
     /// </summary>
     public ValueTask<OperResult> MqttUpAsync(TopicArray topicArray, CancellationToken cancellationToken = default)
     {
-        if (topicArray.Count > 44)
-        {
-
-        }
         return MqttUpAsync(this, topicArray, cancellationToken);
 
         static async PooledValueTask<OperResult> MqttUpAsync(MqttServer @this, TopicArray topicArray, CancellationToken cancellationToken)
