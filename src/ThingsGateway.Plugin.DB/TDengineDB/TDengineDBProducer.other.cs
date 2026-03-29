@@ -10,7 +10,7 @@
 
 using System.Diagnostics;
 using System.Text;
-
+using System.Text.Json;
 using ThingsGateway.Foundation;
 using ThingsGateway.Foundation.Common.Extension;
 using ThingsGateway.Foundation.Common.Json.Extension;
@@ -140,8 +140,14 @@ public partial class TDengineDBProducer : BusinessBaseWithCacheIntervalVariable
                 }
                 else
                 {
-                    var stringData = dbInserts.Where(a => (!a.IsNumber && a.Value is not bool));
-                    var numberData = dbInserts.Where(a => (a.IsNumber || a.Value is bool));
+                    var stringData = dbInserts.Where(a => !(a.IsNumber || a.Value is bool ||
+(a.Value is JsonElement jsonElement && (jsonElement.ValueKind == JsonValueKind.Number || jsonElement.ValueKind == JsonValueKind.True || jsonElement.ValueKind == JsonValueKind.False))
+
+));
+                    var numberData = dbInserts.Where(a => (a.IsNumber || a.Value is bool ||
+                    (a.Value is JsonElement jsonElement && (jsonElement.ValueKind == JsonValueKind.Number || jsonElement.ValueKind == JsonValueKind.True || jsonElement.ValueKind == JsonValueKind.False))
+
+                    ));
 
                     await @this.InserableAsync(numberData, @this._driverPropertys.NumberTableNameLow, cancellationToken).ConfigureAwait(false);
 
