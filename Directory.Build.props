@@ -18,7 +18,7 @@
 		<FoundationVersion>12.5.16</FoundationVersion>
 		<GatewayVersion>12.5.19</GatewayVersion>
 
-		<PluginVersion>12.5.12</PluginVersion>
+		<PluginVersion>12.5.13</PluginVersion>
 		<Version>$(PluginVersion)</Version>
 
 
