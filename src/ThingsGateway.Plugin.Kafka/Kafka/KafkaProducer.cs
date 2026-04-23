@@ -103,7 +103,7 @@ public partial class KafkaProducer : BusinessBaseWithCacheIntervalScriptAll
     }
 
     /// <inheritdoc/>
-    public override bool IsConnected() => success;
+    public override bool IsConnected() => success && producerSuccess;
 
 
 
