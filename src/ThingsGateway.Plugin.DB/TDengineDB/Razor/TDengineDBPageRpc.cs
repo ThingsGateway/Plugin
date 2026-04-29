@@ -17,7 +17,7 @@ using TouchSocket.Rpc;
 
 namespace ThingsGateway.Plugin.DB;
 
-[GeneratorRpcProxy(GeneratorFlag = GeneratorFlag.ExtensionAsync)]
+[GeneratorRpcProxy(GeneratorFlag = CodeGeneratorFlag.ExtensionAsync)]
 internal interface ITDengineDBPageRpc : IRpcServer
 {
     [DmtpRpc]
