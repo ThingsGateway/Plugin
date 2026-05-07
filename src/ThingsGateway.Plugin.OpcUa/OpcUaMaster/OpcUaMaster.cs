@@ -8,6 +8,7 @@
 //  QQ群：605534569
 //------------------------------------------------------------------------------
 
+using BootstrapBlazor.Components;
 using Opc.Ua;
 using Opc.Ua.Client;
 
@@ -201,7 +202,18 @@ public class OpcUaMaster : CollectBase
                 }
             }
 
-            return;
+            if (@this.IsConnected() == false && @this._driverProperties.ActiveSubscribe)
+            {
+                DateTime now = DateTime.Now;
+                @this.CurrentDevice.ReadOnlyVariableRuntimes.ForEach(a =>
+                {
+                    lock (a.Value)
+                    {
+                        if (a.Value.IsOnline)
+                            a.Value.SetValue(null, now, isOnline: false);
+                    }
+                });
+            }
         }
     }
 
@@ -377,18 +389,21 @@ public class OpcUaMaster : CollectBase
                     return;
                 if (TaskSchedulerLoop?.Stoped == true) return;
 
-                if (isGood)
+                lock (item)
                 {
-                    item.SetValue(value, time);
-                }
-                else
-                {
-                    if ((item.IsOnline || item.CollectTime == DateTime.UnixEpoch.ToLocalTime()))
+                    if (isGood)
                     {
-                        LogMessage?.LogWarning($"OPC quality bad:{Environment.NewLine}{item.Name}");
+                        item.SetValue(value, time);
                     }
-                    item.SetValue(null, time, false);
-                    item.VariableSource.LastErrorMessage = data.dataValue.StatusCode.ToString();
+                    else
+                    {
+                        if ((item.IsOnline || item.CollectTime == DateTime.UnixEpoch.ToLocalTime()))
+                        {
+                            LogMessage?.LogWarning($"OPC quality bad:{Environment.NewLine}{item.Name}");
+                        }
+                        item.SetValue(null, time, false);
+                        item.VariableSource.LastErrorMessage = data.dataValue.StatusCode.ToString();
+                    }
                 }
             }
             success = true;
