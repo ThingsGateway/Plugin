@@ -14,6 +14,8 @@ using Microsoft.Extensions.Logging;
 using Opc.Ua;
 using Opc.Ua.Configuration;
 using System.Collections.Frozen;
+using System.Runtime.ConstrainedExecution;
+using System.Security.Cryptography.X509Certificates;
 using ThingsGateway.Foundation.Common;
 using ThingsGateway.Foundation.Common.Extension;
 using ThingsGateway.Foundation.Common.PooledAwait;
@@ -158,6 +160,18 @@ public partial class OpcUaServer : BusinessBase
 
     protected override async Task ProtectedStartAsync(CancellationToken cancellationToken)
     {
+        var result = await CheckCert(cancellationToken).ConfigureAwait(false);
+        if (result)
+        {
+            await Task.Delay(1000, cancellationToken).ConfigureAwait(false);
+            _ = Task.Run(async () =>
+            {
+                if (!cancellationToken.IsCancellationRequested)
+                    await DeviceThreadManage.RestartDeviceAsync(CurrentDevice, false).ConfigureAwait(false);
+            }
+            , cancellationToken);
+            return;
+        }
         // 启动服务器。
         await m_application.CheckApplicationInstanceCertificatesAsync(true, 1200, cancellationToken).ConfigureAwait(false);
 
@@ -167,7 +181,64 @@ public partial class OpcUaServer : BusinessBase
         //IdVariableRuntimes.ForEach(a => VariableCollectChange(a.Value));
         await base.ProtectedStartAsync(cancellationToken).ConfigureAwait(false);
     }
+    private async Task<bool> CheckCert(CancellationToken cancellationToken)
+    {
+        var certId =
+            m_application.ApplicationConfiguration
+               .SecurityConfiguration
+               .ApplicationCertificate;
+        var cert = await certId.FindAsync(true, ct: cancellationToken).ConfigureAwait(false);
 
+        if (cert != null)
+        {
+            var uri = X509Utils.GetApplicationUrisFromCertificate(cert);
+
+            if (!uri.Contains(m_application.ApplicationConfiguration.ApplicationUri))
+            {
+                await DeleteCert(certId, cert).ConfigureAwait(false);
+                certId.DisposeCertificate();
+                return true;
+            }
+
+            var domains = X509Utils.GetDomainsFromCertificate(cert);
+
+            var baseAddresses = m_application.ApplicationConfiguration
+                .ServerConfiguration
+                .BaseAddresses;
+
+            bool matched = baseAddresses.Any(address =>
+            {
+                try
+                {
+                    var uri = new Uri(address);
+                    return domains.Contains(uri.Host, StringComparer.OrdinalIgnoreCase);
+                }
+                catch
+                {
+                    return false;
+                }
+            });
+
+            if (!matched)
+            {
+                await DeleteCert(certId, cert).ConfigureAwait(false);
+                certId.DisposeCertificate();
+                return true;
+            }
+        }
+
+        return false;
+    }
+    private async Task DeleteCert(CertificateIdentifier? certId, X509Certificate2 cert)
+    {
+        var store = certId.OpenStore(DefaultTelemetryContext);
+
+        if (store != null)
+        {
+            await store.DeleteAsync(cert.Thumbprint).ConfigureAwait(false);
+            store.Close();
+        }
+    }
     protected override Task ProtectedExecuteAsync(object? state, CancellationToken cancellationToken)
     {
         return ProtectedExecuteAsync(this, cancellationToken);
@@ -181,6 +252,7 @@ public partial class OpcUaServer : BusinessBase
                     try
                     {
                         await Task.Delay(2000, cancellationToken).ConfigureAwait(false);
+
                         await @this.m_application.CheckApplicationInstanceCertificatesAsync(true, 1200, cancellationToken).ConfigureAwait(false);
                         await @this.m_application.StartAsync(@this.m_server).ConfigureAwait(false);
                         GC.Collect();
