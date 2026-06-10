@@ -16,17 +16,17 @@
 
 		</NoWarn>
 		<FoundationVersion>12.5.30</FoundationVersion>
-		<GatewayVersion>12.5.36</GatewayVersion>
+		<GatewayVersion>12.5.37</GatewayVersion>
 
-		<PluginVersion>12.5.20</PluginVersion>
+		<PluginVersion>12.5.21</PluginVersion>
 		<Version>$(PluginVersion)</Version>
 
 
 		<LangVersion>preview</LangVersion>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<NET10Version>10.0.8</NET10Version>
-		<NET8Version>8.0.27</NET8Version>
+		<NET10Version>10.0.9</NET10Version>
+		<NET8Version>8.0.28</NET8Version>
 		<SatelliteResourceLanguages>zh-Hans;en-US</SatelliteResourceLanguages>
 		<!--设置为 true时，删除特定于全球化的代码和数据。 有关详细信息，请参阅固定模式。-->
 		<InvariantGlobalization>false</InvariantGlobalization>
