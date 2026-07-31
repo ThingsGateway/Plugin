@@ -34,13 +34,13 @@
 		</PackageReference>
 	</ItemGroup>
 	<ItemGroup Condition=" '$(TargetFramework)' != 'net6.0' ">
-		<PackageReference Include="MQTTnet.Server" Version="5.1.0.1559" GeneratePathProperty="true">
+		<PackageReference Include="MQTTnet.Server" Version="5.2.0.1603" GeneratePathProperty="true">
 			<PrivateAssets>contentFiles;build;buildMultitargeting;buildTransitive;analyzers;</PrivateAssets>
 		</PackageReference>
-		<PackageReference Include="MQTTnet.AspNetCore" Version="5.1.0.1559" GeneratePathProperty="true">
+		<PackageReference Include="MQTTnet.AspNetCore" Version="5.2.0.1603" GeneratePathProperty="true">
 			<PrivateAssets>contentFiles;build;buildMultitargeting;buildTransitive;analyzers;</PrivateAssets>
 		</PackageReference>
-		<PackageReference Include="MQTTnet" Version="5.1.0.1559" GeneratePathProperty="true">
+		<PackageReference Include="MQTTnet" Version="5.2.0.1603" GeneratePathProperty="true">
 			<PrivateAssets>contentFiles;build;buildMultitargeting;buildTransitive;analyzers;</PrivateAssets>
 		</PackageReference>
 	</ItemGroup>

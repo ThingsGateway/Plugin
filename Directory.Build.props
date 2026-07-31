@@ -25,8 +25,8 @@
 		<LangVersion>preview</LangVersion>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<NET10Version>10.0.9</NET10Version>
-		<NET8Version>8.0.28</NET8Version>
+		<NET10Version>10.0.10</NET10Version>
+		<NET8Version>8.0.29</NET8Version>
 		<SatelliteResourceLanguages>zh-Hans;en-US</SatelliteResourceLanguages>
 		<!--设置为 true时，删除特定于全球化的代码和数据。 有关详细信息，请参阅固定模式。-->
 		<InvariantGlobalization>false</InvariantGlobalization>
