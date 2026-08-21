@@ -9,7 +9,7 @@
 //------------------------------------------------------------------------------
 
 using Microsoft.Extensions.Localization;
-
+using System.Buffers;
 using System.Collections.Concurrent;
 using ThingsGateway.Foundation.Common.BitExtension;
 using ThingsGateway.Foundation.Common.DictionaryExtensions;
@@ -185,7 +185,7 @@ public class ModbusSlave : BusinessReceivedFoundationBase
                     var bitIndex = @this._plc.GetBitOffset(addressStr);
                     if (modbusRequest.FunctionCode == 0x03 && dType == DataTypeEnum.Boolean && bitIndex != null)
                     {
-                        var int16Data = thingsGatewayBitConverter.ToUInt16(modbusRequest.MasterWriteDatas.Span, 0);
+                        var int16Data = thingsGatewayBitConverter.ToUInt16(modbusRequest.SlaveWriteDatas.ToArray(), 0);
                         var wData = BitHelper.GetBit(int16Data, bitIndex.Value);
 
                         var result = await item.Value.RpcAsync(wData.ToSystemTextJsonString(), $"{nameof(ModbusSlave)}-{@this.CurrentDevice.Name}-{$"{channel}"}").ConfigureAwait(false);
@@ -195,7 +195,7 @@ public class ModbusSlave : BusinessReceivedFoundationBase
                     }
                     else
                     {
-                        _ = thingsGatewayBitConverter.GetChangedDataFormBytes(@this._plc, addressStr, modbusRequest.MasterWriteDatas, 0, dType, item.Value.ArrayLength ?? 1, null, out var data);
+                        _ = thingsGatewayBitConverter.GetChangedDataFormBytes(@this._plc, addressStr, modbusRequest.SlaveWriteDatas.ToArray(), 0, dType, item.Value.ArrayLength ?? 1, null, out var data);
 
                         var result = await item.Value.RpcAsync(data.ToSystemTextJsonString(), $"{nameof(ModbusSlave)}-{@this.CurrentDevice.Name}-{$"{channel}"}").ConfigureAwait(false);
 
