@@ -176,7 +176,7 @@ public static class Helper
         dest.Value = JsonUtil.GetStringFromObj(src.Value, true);
         dest.CreateTime = DateTime.UtcNow;
 
-        dest.CollectTime = src.CollectTime < DateTime.MinValue ? UtcTime1970 : src.CollectTime;
+        dest.CollectTime = NormalizeQuestDbTime(src.CollectTime);
         dest.DeviceName = src.DeviceName;
         dest.IsOnline = src.IsOnline;
         dest.Name = src.Name;
@@ -196,7 +196,7 @@ public static class Helper
         dest.Value = JsonUtil.GetStringFromObj(src.Value, true);
         dest.CreateTime = DateTime.UtcNow;
 
-        dest.CollectTime = src.CollectTime < DateTime.MinValue ? UtcTime1970 : src.CollectTime;
+        dest.CollectTime = NormalizeQuestDbTime(src.CollectTime);
         dest.DeviceName = src.DeviceName;
         dest.IsOnline = src.IsOnline;
         dest.Name = src.Name;
@@ -216,7 +216,7 @@ public static class Helper
         dest.Value = src.Value.GetType() == typeof(bool) ? ConvertHelper.ToBoolean(src.Value, false) ? 1 : 0 : ConvertHelper.ToDecimal(src.Value, 0);
         dest.CreateTime = DateTime.UtcNow;
 
-        dest.CollectTime = src.CollectTime < DateTime.MinValue ? UtcTime1970 : src.CollectTime;
+        dest.CollectTime = NormalizeQuestDbTime(src.CollectTime);
         dest.DeviceName = src.DeviceName;
         dest.IsOnline = src.IsOnline;
         dest.Name = src.Name;
@@ -236,7 +236,7 @@ public static class Helper
         dest.Value = src.Value.GetType() == typeof(bool) ? ConvertHelper.ToBoolean(src.Value, false) ? 1 : 0 : ConvertHelper.ToDecimal(src.Value, 0);
         dest.CreateTime = DateTime.UtcNow;
 
-        dest.CollectTime = src.CollectTime < DateTime.MinValue ? UtcTime1970 : src.CollectTime;
+        dest.CollectTime = NormalizeQuestDbTime(src.CollectTime);
         dest.DeviceName = src.DeviceName;
         dest.IsOnline = src.IsOnline;
         dest.Name = src.Name;
@@ -249,7 +249,21 @@ public static class Helper
             );
     }
 
-    static DateTime UtcTime1970 = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+    private static readonly DateTime UtcTime1970 = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+    /// <summary>
+    /// QuestDB stores timestamps as UTC. Invalid/default values are replaced with
+    /// the existing epoch fallback instead of being sent as an out-of-range date.
+    /// </summary>
+    private static DateTime NormalizeQuestDbTime(DateTime value)
+    {
+        if (value == DateTime.MinValue || value == DateTime.MaxValue)
+        {
+            return UtcTime1970;
+        }
+
+        return value.Kind == DateTimeKind.Utc ? value : value.ToUniversalTime();
+    }
 
     #endregion
 

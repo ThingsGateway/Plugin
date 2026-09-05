@@ -63,7 +63,7 @@
 			<PrivateAssets>contentFiles;build;buildMultitargeting;buildTransitive;analyzers;</PrivateAssets>
 		</PackageReference>
 		
-		<PackageReference Include="BitFaster.Caching" Version="2.6.0" GeneratePathProperty="true">
+		<PackageReference Include="BitFaster.Caching" Version="2.6.1" GeneratePathProperty="true">
 			<PrivateAssets>contentFiles;build;buildMultitargeting;buildTransitive;analyzers;</PrivateAssets>
 		</PackageReference>
 
